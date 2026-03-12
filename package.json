@@ -1,0 +1,19 @@
+{
+  "name": "fitness_tracker",
+  "version": "1.0.0",
+  "description": "Fitness tracking website for users to track their food and activity habits.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonyranye/Web-Dev-Project.git"
+  },
+  "author": "Isaac, Anthony, Matthew, Owen, Syeda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tonyranye/Web-Dev-Project/issues"
+  },
+  "homepage": "https://github.com/tonyranye/Web-Dev-Project#readme"
+}
