@@ -4,7 +4,9 @@
   "description": "Fitness tracking website for users to track their food and activity habits.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/tonyranye/Web-Dev-Project/issues"
   },
-  "homepage": "https://github.com/tonyranye/Web-Dev-Project#readme"
+  "homepage": "https://github.com/tonyranye/Web-Dev-Project#readme",
+  "dependencies": {
+    "vitepress": "^1.6.4"
+  }
 }
