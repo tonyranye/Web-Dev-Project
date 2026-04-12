@@ -1,14 +1,29 @@
 <template>
-  <nav class="navbar">
-    <h1 class="logo">Fitness Tracker</h1>
+  <aside class="sidebar">
+    <div class="logo">🏋️‍♂️</div>
 
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/workouts">Workouts</a></li>
-      <li><a href="/progress">Progress</a></li>
-      <li><a href="/profile">Profile</a></li>
-    </ul>
-  </nav>
+    <nav class="menu">
+      <a class="menu-item" href="/">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a class="menu-item" href="/workouts">
+        <i class="fa-solid fa-dumbbell"></i>
+        <span>Workouts</span>
+      </a>
+
+      <a class="menu-item" href="/progress">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Progress</span>
+      </a>
+
+      <a class="menu-item" href="/profile">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+  </aside>
 </template>
 
 <script>
@@ -18,24 +33,48 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: #222;
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: #1e1e1e;
   color: white;
-}
-
-.nav-links {
   display: flex;
-  gap: 1.5rem;
-  list-style: none;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
-.nav-links a {
+.logo {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   color: white;
   text-decoration: none;
-  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.menu-item:hover {
+  background: #333;
+}
+
+.menu-item i {
+  font-size: 1.4rem;
 }
 </style>

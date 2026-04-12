@@ -3,8 +3,8 @@
     <Navbar />
 
     <section class="home-content">
-      <h2>Welcome to your Fitness Tracker</h2>
-      <p>Track workouts, monitor progress, and stay motivated.</p>
+      <h2>Header</h2>
+      <p>Paragraph.</p>
     </section>
   </div>
 </template>

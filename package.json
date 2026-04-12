@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/tonyranye/Web-Dev-Project#readme",
   "dependencies": {
-    "vitepress": "^1.6.4"
+    "vitepress": "^1.6.4",
+    "vue-router": "^5.0.4"
   }
 }
