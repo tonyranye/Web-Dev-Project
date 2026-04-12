@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  name: "Fitness Tracker"
-  text: "A fitness tracking site made to help you stay on top of your habits"
+  name: 'Fitness Tracker'
+  text: 'A fitness tracking site made to help you stay on top of your habits'
   tagline: My great project tagline
   actions:
     - theme: brand
@@ -22,4 +22,3 @@ features:
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-
