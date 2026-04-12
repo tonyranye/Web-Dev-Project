@@ -1,0 +1,7 @@
+Matthew
+1. Designed navbar component
+2. Setup mongodb for groupmates to use
+3. Setup Express for groupmates to use
+4. Setup Axios for groupmates to use
+
+
