@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "express": "^5.2.1",
+    "pinia": "^3.0.4",
+    "router": "^2.2.0",
     "vue": "^3.5.31"
   },
   "devDependencies": {
