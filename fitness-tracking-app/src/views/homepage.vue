@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Navbar />
 
     <section class="home-content">
       <h2>Header</h2>
@@ -13,7 +12,7 @@
 import Navbar from '../components/navbar.vue'
 
 export default {
-  name: 'HomeView',
+  name: 'Homepage',
   components: {
     Navbar,
   },
