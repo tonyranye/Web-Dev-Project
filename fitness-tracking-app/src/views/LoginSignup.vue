@@ -37,7 +37,7 @@
 
 <script>
 import { supabase } from '@/lib/supabase';
-
+import Navbar from '../components/navbar.vue'
 
 export default{
     data(){

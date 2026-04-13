@@ -21,15 +21,25 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
 router.beforeEach(async (to, from, next) => {
-  const user = await supabase.auth.getSession()
-  const isAuthenticated = user.data.session !== null
-  if (to.path === '/login' && isAuthenticated) {
-    next('/profile')
-  } else if (to.path !== '/login' && !isAuthenticated) {
-    next('/login')
-  } else {
-    next()
+  const { data: { user } } = await supabase.auth.getUser()
+  const isAuthenticated = !!user
+
+  // Public routes that don't require login
+  const publicRoutes = ['/', '/login']
+
+  // If route requires auth and user is not logged in → redirect to login
+  if (!publicRoutes.includes(to.path) && !isAuthenticated) {
+    return next('/login')
   }
+
+  // If user is logged in and tries to go to login → redirect to profile
+  if (to.path === '/login' && isAuthenticated) {
+    return next('/profile')
+  }
+
+  next()
 })
+
 export default router
