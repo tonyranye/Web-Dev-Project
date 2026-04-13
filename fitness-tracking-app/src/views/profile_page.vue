@@ -37,6 +37,8 @@
       <td>Lose weight</td>
     </tr>
   </table>
+
+  
   </div>
 
 </template>

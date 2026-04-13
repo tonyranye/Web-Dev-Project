@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { supabase } from '@/lib/supabase';
+
 
 export default{
     data(){
@@ -55,10 +57,42 @@ export default{
             if(this.isSignUp){
                 // Handle sign up logic
                 console.log('Signing up...');
+                supabase.auth.signUp({
+                    email: this.username,
+                    password: this.password,
+                    options: {
+                        data: {
+                            first_name: this.firstname,
+                            last_name: this.lastname,
+                        }
+                    }
+                }).then(({ user, error }) => {
+                    if (error) {
+                        console.error('Error signing up:', error.message);
+                    } else {
+                        console.log('User signed up:', user);
+                        // Optionally, you can redirect the user to the homepage or profile page
+                        this.$router.push('/profile')
+                    }
+                });
 
             } else {
                 // Handle log in logic
                 console.log('Logging in...');
+                supabase.auth.signInWithPassword({
+                    email: this.username,
+                    password: this.password,
+                }).then(({user, error}) => {
+                    if(error){
+                        console.error('Error logging in:', error.message);
+                    } else{
+                        console.log('User logged in:', user);
+                        // Optionally, you can redirect the user to the homepage or profile page
+                        this.$router.push('/profile')
+                    }
+                    }
+                );
+                
 
             }
         }
