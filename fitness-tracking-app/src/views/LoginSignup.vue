@@ -4,10 +4,11 @@
 
 <div v-if="isSignUp">
 
-<form>
+<form @submit.prevent="handleSubmit">
+
     <label for="firstname"> First Name: </label>
     <input type="text" id="firstname" v-model="firstname" required>
-    <label for="lastname"> Label Name: </label>
+    <label for="lastname"> Last Name: </label>
     <input type="text" id="lastname" v-model="lastname" required>
     <label for="username">Username:</label>
     <input type="text" id="username" v-model="username" required>
@@ -20,7 +21,7 @@
 </div>
 
 <div v-else>
-<form>
+<form @submit.prevent="handleSubmit">
     <label for="username">Username:</label>
     <input type="text" id="username" v-model="username" required>
     <label for="password"> Password:</label>
@@ -49,12 +50,24 @@ export default{
     methods: {
         toggleForm(){
             this.isSignUp = !this.isSignUp;
+        },
+        handleSubmit(){
+            if(this.isSignUp){
+                // Handle sign up logic
+                console.log('Signing up...');
+
+            } else {
+                // Handle log in logic
+                console.log('Logging in...');
+
+            }
         }
     },
     computed: {
         formTitle(){
             return this.isSignUp ? 'Sign Up' : 'Log In';
         }
+
     }
 }
 
