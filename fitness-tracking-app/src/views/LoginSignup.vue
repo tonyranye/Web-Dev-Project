@@ -10,8 +10,8 @@
     <input type="text" id="firstname" v-model="firstname" required>
     <label for="lastname"> Last Name: </label>
     <input type="text" id="lastname" v-model="lastname" required>
-    <label for="username">Username:</label>
-    <input type="text" id="username" v-model="username" required>
+    <label for="email">Email:</label>
+    <input type="text" id="email" v-model="email" required>
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Sign up</button>
@@ -22,8 +22,8 @@
 
 <div v-else>
 <form @submit.prevent="handleSubmit">
-    <label for="username">Username:</label>
-    <input type="text" id="username" v-model="username" required>
+    <label for="email">Email:</label>
+    <input type="text" id="email" v-model="email" required>
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Log in</button>
@@ -71,7 +71,7 @@ export default{
                 const user = data.user;
 
                 // create profile row
-                await superbase.from('profiles').insert({
+                await supabase.from('profiles').insert({
                     id: user.id,
                     first_name: this.firstname,
                     last_name: this.lastname,
