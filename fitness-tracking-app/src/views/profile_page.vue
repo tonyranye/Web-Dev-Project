@@ -7,8 +7,43 @@
     </section>
 
     <img src="../assets/profile-pic-placeholder.png" alt="Profile Picture" class="profile-pic">
-  <h1>"Random name"</h1>
-  <h3>"Random Username"</h3>
+  <h1>Random name</h1>
+  <h3>Random Username</h3>
+
+  <table>
+    <tr>
+      <th>Attribute</th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <td>Age</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <td>Height</td>
+      <td>180 cm</td>
+    </tr>
+    <tr>
+      <td>Weight</td>
+      <td>75 kg</td>
+    </tr>
+    <tr>
+      <td>Calories Burned</td>
+      <td>2000</td>
+    </tr>
+
+    <tr>
+      <td> Fitness Goal</td>
+      <td>Lose weight</td>
+    </tr>
+  </table>
   </div>
 
 </template>
+
+
+
+<script></script>
+
+
+<style></style>
