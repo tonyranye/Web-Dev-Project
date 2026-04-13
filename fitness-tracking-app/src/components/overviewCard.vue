@@ -1,21 +1,56 @@
 <script setup>
 
-defineProps({
+// Importing and implementation of supabase db
+import { ref, onMounted } from 'vue'
+import { supabase } from '../lib/supabase'
+
+
+// Importing and implementation of supabase db
+// Props
+const props = defineProps({
   stats: {
     type: Array,
     default: () => [
-      {label: 'Steps', value: 100, change: '+12%', arrow: 'up'},
-      {label: 'Heart Rate', value: 75, change: '-5%', arrow: 'down'},
-      {label: 'Sleep', value: 8, change: '+10%', arrow: 'up'}
+      { label: 'Meal', value: null },
+      { label: 'Heart Rate', value: 75, change: '-5%', arrow: 'down' },
+      { label: 'Sleep', value: 8, change: '+10%', arrow: 'up' }
     ]
   }
 })
+
+
+// Local reactive copy of stats (so we can modify it)
+const localStats = ref([...props.stats])
+
+const meal = ref(null)
+const errorMessage = ref(null)
+
+async function loadMeal(mealId) {
+  const { data, error } = await supabase
+    .from('meals')
+    .select('name, calories')
+    .eq('id', mealId)
+    .single()
+
+  if (error) {
+    errorMessage.value = error.message
+  } else {
+    meal.value = data
+
+    localStats.value[0].value = data.calories
+  }
+}
+
+onMounted(() => {
+  loadMeal('b6cd4c7b-526c-4692-aa9e-0defa28cf454')
+})
+
 
 </script>
 
 <template>
   <div class="overview-card">
-    <div v-for="(stat, index) in stats"
+    <div v-for="(stat, index) in localStats"
          :key="index"
          class="overview-item"
     >
