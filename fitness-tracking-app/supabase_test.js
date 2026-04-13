@@ -1,3 +1,4 @@
+
 import { supabase } from './src/lib/supabase.js'
 
 
@@ -9,10 +10,3 @@ async function testSupabase() {
 }
 
 testSupabase()
-
-async function testConnection() {
-  const { data, error } = await supabase.from('_test').select('*')
-  console.log(data, error)
-}
-
-testConnection()
