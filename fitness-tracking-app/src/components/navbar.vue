@@ -29,7 +29,7 @@
 <style scoped>
 
 .sidebar{
-  width: 200px;
+  min-width: 150px;
   min-height: 100vh;
 
   top: 0;
