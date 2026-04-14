@@ -1,21 +1,86 @@
 <script setup>
 
-defineProps({
+// Importing and implementation of supabase db
+import { ref, onMounted } from 'vue'
+import { supabase } from '../lib/supabase'
+
+
+// Importing and implementation of supabase db
+// Props
+const props = defineProps({
   stats: {
     type: Array,
     default: () => [
-      {label: 'Steps', value: 100, change: '+12%', arrow: 'up'},
-      {label: 'Heart Rate', value: 75, change: '-5%', arrow: 'down'},
-      {label: 'Sleep', value: 8, change: '+10%', arrow: 'up'}
+      { label: 'Name', value: '-' },
+      { label: 'Meal', value: '-' , change: '-5%', arrow: 'down' },
     ]
   }
 })
 
+// Local reactive copy of stats (so we can modify it)
+const localStats = ref([...props.stats])
+
+const meal = ref(null)
+const errorMessage = ref(null)
+
+
+
+
+
+
+async function loadMostRecentMeal() {
+  // get logged-in user
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    localStats.value[0].value = '-'
+    localStats.value[1].value = '-'
+    return
+  }
+
+  // fetch most recent meal
+  const { data, error } = await supabase
+    .from('meals')
+    .select('name, calories')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single()
+
+  if (error || !data) {
+    localStats.value[0].value = '-'
+    localStats.value[1].value = '-'
+    return
+  }
+
+  localStats.value[0].value = data.name
+  localStats.value[1].value = data.calories
+}
+
+onMounted(() => {
+  loadMostRecentMeal()
+})
+
+
 </script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <template>
-  <div class="card">
-    <div v-for="(stat, index) in stats"
+  <div class="overview-card">
+    <div v-for="(stat, index) in localStats"
          :key="index"
          class="overview-item"
     >
@@ -28,6 +93,13 @@ defineProps({
     </div>
   </div>
 </template>
+
+
+
+
+
+
+
 
 <style scoped>
 
