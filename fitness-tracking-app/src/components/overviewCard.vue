@@ -29,7 +29,7 @@ async function loadMeal(mealId) {
   const { data, error } = await supabase
     .from('meals')
     .select('name, calories')
-    .eq('id', mealId)
+    .eq('meal_id', mealId)
     .single()
 
   if (error) {
