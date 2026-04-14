@@ -11,13 +11,11 @@ const props = defineProps({
   stats: {
     type: Array,
     default: () => [
-      { label: 'Meal', value: null },
-      { label: 'Heart Rate', value: 75, change: '-5%', arrow: 'down' },
-      { label: 'Sleep', value: 8, change: '+10%', arrow: 'up' }
+      { label: 'Name', value: '-' },
+      { label: 'Meal', value: '-' , change: '-5%', arrow: 'down' },
     ]
   }
 })
-
 
 // Local reactive copy of stats (so we can modify it)
 const localStats = ref([...props.stats])
@@ -25,28 +23,60 @@ const localStats = ref([...props.stats])
 const meal = ref(null)
 const errorMessage = ref(null)
 
-async function loadMeal(mealId) {
+
+
+
+
+
+async function loadMostRecentMeal() {
+  // get logged-in user
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    localStats.value[0].value = '-'
+    localStats.value[1].value = '-'
+    return
+  }
+
+  // fetch most recent meal
   const { data, error } = await supabase
     .from('meals')
     .select('name, calories')
-    .eq('id', mealId)
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
     .single()
 
-  if (error) {
-    errorMessage.value = error.message
-  } else {
-    meal.value = data
-
-    localStats.value[0].value = data.calories
+  if (error || !data) {
+    localStats.value[0].value = '-'
+    localStats.value[1].value = '-'
+    return
   }
+
+  localStats.value[0].value = data.name
+  localStats.value[1].value = data.calories
 }
 
 onMounted(() => {
-  loadMeal('b6cd4c7b-526c-4692-aa9e-0defa28cf454')
+  loadMostRecentMeal()
 })
 
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <template>
   <div class="overview-card">
@@ -63,6 +93,13 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+
+
+
+
+
+
 
 <style scoped>
 
