@@ -103,7 +103,7 @@ onMounted(() => {
 
 <style scoped>
 
-.overview-card{
+.card{
   background: #1a2e1a;
   border-radius: 12px;
   border: #296b29 2px solid;
