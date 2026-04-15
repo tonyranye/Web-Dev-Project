@@ -12,7 +12,7 @@ const props = defineProps({
     type: Array,
     default: () => [
       { label: 'Name', value: '-' },
-      { label: 'Meal', value: '-' , change: '-5%', arrow: 'down' },
+      { label: 'Calories', value: '-' , change: '-5%', arrow: 'down' },
     ]
   }
 })
@@ -31,6 +31,7 @@ const errorMessage = ref(null)
 async function loadMostRecentMeal() {
   // get logged-in user
   const { data: { user } } = await supabase.auth.getUser()
+  console.log('Current user:', user)
 
   if (!user) {
     localStats.value[0].value = '-'
@@ -41,17 +42,17 @@ async function loadMostRecentMeal() {
   // fetch most recent meal
   const { data, error } = await supabase
     .from('meals')
-    .select('name, calories')
+    .select('name, calories, created_at')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .limit(1)
     .single()
 
   if (error || !data) {
-    localStats.value[0].value = '-'
-    localStats.value[1].value = '-'
+    localStats.value[0].value = 'error'
+    localStats.value[1].value = 'error'
     return
-  }
+  } 
 
   localStats.value[0].value = data.name
   localStats.value[1].value = data.calories
