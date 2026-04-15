@@ -8,8 +8,8 @@
       />
 
       <div class="info">
-        <h1>{{ fullName }}</h1>
-        <h3>@{{ username }}</h3>
+        <h1>{{ profile.full_name }}</h1>
+        <h3>@{{ profile.user_id }}</h3>
       </div>
     </div>
 
@@ -19,19 +19,21 @@
   </header>
 </template>
 
-<script setup>
-import { defineProps } from 'vue'
+<script>
+import {ProfileService} from "@/lib/profileService.js";
+import {supabase} from "@/lib/supabase.js";
 
-const props = defineProps({
-  fullName: {
-    type: String,
-    required: true
+export default {
+  data() {
+    return {
+      profile: {}
+    }
   },
-  username: {
-    type: String,
-    required: true
-  }
-})
+
+  async mounted() {
+    this.profile = await ProfileService()
+  },
+}
 </script>
 
 <style scoped>

@@ -22,7 +22,7 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
   const { data: { user } } = await supabase.auth.getUser()
   const isAuthenticated = !!user
 
@@ -31,15 +31,15 @@ router.beforeEach(async (to, from, next) => {
 
   // If route requires auth and user is not logged in → redirect to login
   if (!publicRoutes.includes(to.path) && !isAuthenticated) {
-    return next('/login')
+    return '/login'
   }
 
   // If user is logged in and tries to go to login → redirect to profile
   if (to.path === '/login' && isAuthenticated) {
-    return next('/profile')
+    return '/profile'
   }
 
-  next()
+  return true
 })
 
 export default router

@@ -52,6 +52,7 @@ export default{
             age: 0,
             height: 0,
             weight: 0,
+            email: ''
         }
     },
     methods: {
@@ -70,6 +71,7 @@ export default{
 
                 if (error) {
                     console.error('Error signing up:', error.message)
+                    alert(error.message)
                     return
                 }
 
@@ -96,6 +98,7 @@ export default{
 
                 if (error) {
                     console.error('Error logging in:', error.message)
+                    alert(error.message)
                     return
                 }
 

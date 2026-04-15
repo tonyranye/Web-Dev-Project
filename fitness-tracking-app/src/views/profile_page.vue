@@ -12,6 +12,7 @@
 
 <script>
 import { supabase } from '@/lib/supabase'
+import { ProfileService } from '@/lib/profileService'
 import ProfileHeader from '@/components/profile_page/profileHeader.vue'
 import ProfileDetails from '@/components/profile_page/profileDetails.vue'
 
@@ -27,16 +28,9 @@ export default {
     }
   },
 
+  // instead, just call function and assign it directly to the variable
   async mounted() {
-    const { data: { user } } = await supabase.auth.getUser()
-
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', user.id)
-      .single()
-
-    this.profile = data
+    this.profile = await ProfileService()
   },
 
   methods: {
