@@ -2,7 +2,7 @@
 
 // Importing and implementation of supabase db
 import { ref, onMounted } from 'vue'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../../lib/supabase.js'
 
 
 // Importing and implementation of supabase db

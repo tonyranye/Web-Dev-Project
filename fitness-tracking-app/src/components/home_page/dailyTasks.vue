@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="graph-component">
+  <div class="task-component">
     <h3>Task Component</h3>
     <p>This is a placeholder for the daily task component.</p>
   </div>

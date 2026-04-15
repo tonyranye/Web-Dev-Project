@@ -1,12 +1,10 @@
 <script setup>
-
+import OverviewCard from "@/components/home_page/overviewCard.vue"; OverviewCard
 </script>
 
 <template>
-  <div class="graph-component">
     <h3>Graph Component</h3>
     <p>This is a placeholder for the graph component.</p>
-  </div>
 </template>
 
 <style scoped>
