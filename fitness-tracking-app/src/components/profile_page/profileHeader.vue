@@ -13,28 +13,23 @@
       </div>
     </div>
 
-    <button class="logout-btn" @click="$emit('logout')">
+    <button class="logout-btn" @click="emit('logout')">
       Logout
     </button>
   </header>
 </template>
 
-<script>
-import {ProfileService} from "@/lib/profileService.js";
-import {supabase} from "@/lib/supabase.js";
+<script setup>
+const props = defineProps({
+  profile: {
+    type: Object,
+    required: true
+  }
+})
 
-export default {
-  data() {
-    return {
-      profile: {}
-    }
-  },
-
-  async mounted() {
-    this.profile = await ProfileService()
-  },
-}
+const emit = defineEmits(['logout'])
 </script>
+
 
 <style scoped>
 .profile-header {

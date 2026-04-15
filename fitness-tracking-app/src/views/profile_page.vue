@@ -1,12 +1,25 @@
 <template>
   <div>
+    <!-- Profile Header --> 
     <ProfileHeader
-      :fullName="profile.full_name"
-      :username="profile.username"
+      :profile="profile"
       @logout="logout"
     />
 
-    <ProfileDetails :profile="profile" />
+    <!-- View profile details if not editing --> 
+    <ProfileDetails
+      v-if="!editing"
+      :profile="profile"
+      @edit="editing = true"
+    />
+
+    <!-- View profile edit form if editing --> 
+    <ProfileEditForm
+      v-else
+      :profile="profile"
+      @save="updateProfile"
+      @cancel="editing = false"
+    />
   </div>
 </template>
 
@@ -15,16 +28,19 @@ import { supabase } from '@/lib/supabase'
 import { ProfileService } from '@/lib/profileService'
 import ProfileHeader from '@/components/profile_page/profileHeader.vue'
 import ProfileDetails from '@/components/profile_page/profileDetails.vue'
+import ProfileEditForm from '@/components/profile_page/profileEditForm.vue'
 
 export default {
   components: {
     ProfileHeader,
-    ProfileDetails
+    ProfileDetails,
+    ProfileEditForm
   },
 
   data() {
     return {
-      profile: {}
+      profile: {},
+      editing: false
     }
   },
 
@@ -34,6 +50,18 @@ export default {
   },
 
   methods: {
+    async updateProfile(updated) {
+      const { data: { user } } = await supabase.auth.getUser()
+
+      await supabase
+        .from('profiles')
+        .update(updated)
+        .eq('user_id', user.id)
+
+      this.profile = await ProfileService()
+      this.editing = false
+    },
+
     async logout() {
       await supabase.auth.signOut()
       this.$router.push('/login')
