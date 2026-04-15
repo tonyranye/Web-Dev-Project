@@ -32,10 +32,6 @@
   min-width: 150px;
   min-height: 100vh;
 
-  top: 0;
-  left: 0;
-  margin: auto;
-
   background: #222222;
   border-radius: 8px 8px 8px 8px;
   padding: 0 8px 12px 12px;
