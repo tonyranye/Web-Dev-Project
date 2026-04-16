@@ -6,6 +6,3 @@ docs/.vitepress/dist
 
 # vitepress cache
 docs/.vitepress/cache
-
-# secret key
-fitness-tracking-app\server\.env
