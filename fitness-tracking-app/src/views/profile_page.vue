@@ -1,51 +1,71 @@
 <template>
- <div>
+  <div>
+    <!-- Profile Header --> 
+    <ProfileHeader
+      :profile="profile"
+      @logout="logout"
+    />
 
-    <section class="home-content">
-      <h2>Profile Page</h2>
-      <p>Paragraph.</p>
-    </section>
+    <!-- View profile details if not editing --> 
+    <ProfileDetails
+      v-if="!editing"
+      :profile="profile"
+      @edit="editing = true"
+    />
 
-    <img src="../assets/profile-pic-placeholder.png" alt="Profile Picture" class="profile-pic">
-  <h1>Random name</h1>
-  <h3>Random Username</h3>
-
-  <table>
-    <tr>
-      <th>Attribute</th>
-      <th>Value</th>
-    </tr>
-    <tr>
-      <td>Age</td>
-      <td>25</td>
-    </tr>
-    <tr>
-      <td>Height</td>
-      <td>180 cm</td>
-    </tr>
-    <tr>
-      <td>Weight</td>
-      <td>75 kg</td>
-    </tr>
-    <tr>
-      <td>Calories Burned</td>
-      <td>2000</td>
-    </tr>
-
-    <tr>
-      <td> Fitness Goal</td>
-      <td>Lose weight</td>
-    </tr>
-  </table>
-
-  
+    <!-- View profile edit form if editing --> 
+    <ProfileEditForm
+      v-else
+      :profile="profile"
+      @save="updateProfile"
+      @cancel="editing = false"
+    />
   </div>
-
 </template>
 
+<script>
+import { supabase } from '@/lib/supabase'
+import { ProfileService } from '@/lib/profileService'
+import ProfileHeader from '@/components/profile_page/profileHeader.vue'
+import ProfileDetails from '@/components/profile_page/profileDetails.vue'
+import ProfileEditForm from '@/components/profile_page/profileEditForm.vue'
 
+export default {
+  components: {
+    ProfileHeader,
+    ProfileDetails,
+    ProfileEditForm
+  },
 
-<script></script>
+  data() {
+    return {
+      profile: {},
+      editing: false
+    }
+  },
 
+  // instead, just call function and assign it directly to the variable
+  async mounted() {
+    this.profile = await ProfileService()
+  },
 
-<style></style>
+  methods: {
+    async updateProfile(updated) {
+      const { data: { user } } = await supabase.auth.getUser()
+
+      await supabase
+        .from('profiles')
+        .update(updated)
+        .eq('user_id', user.id)
+
+      this.profile = await ProfileService()
+      this.editing = false
+    },
+
+    async logout() {
+      await supabase.auth.signOut()
+      this.$router.push('/login')
+    }
+  }
+}
+</script>

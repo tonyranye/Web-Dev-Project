@@ -29,12 +29,8 @@
 <style scoped>
 
 .sidebar{
-  width: 200px;
+  min-width: 150px;
   min-height: 100vh;
-
-  top: 0;
-  left: 0;
-  margin: auto;
 
   background: #222222;
   border-radius: 8px 8px 8px 8px;
