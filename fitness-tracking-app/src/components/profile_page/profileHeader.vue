@@ -2,7 +2,7 @@
   <header class="profile-header">
     <div class="left">
       <img
-        src="@/assets/placeholder_profile_picture.webp"
+        :src="profile.profile_picture_url" || placeholder
         alt="Profile Picture"
         class="profile-pic"
       />
@@ -20,6 +20,8 @@
 </template>
 
 <script setup>
+import placeholder from '@/assets/placeholder_pfp_blue.avif'
+
 const props = defineProps({
   profile: {
     type: Object,

@@ -1,0 +1,73 @@
+import express from 'express'
+import cors from 'cors'
+import multer from 'multer'
+import dotenv from 'dotenv'
+import { createClient } from '@supabase/supabase-js'
+
+dotenv.config()
+
+const app = express()
+app.use(cors())
+app.use(express.json())
+
+// Multer setup for file uploads
+const upload = multer({storage: multer.memoryStorage()})
+
+// Supabase client setup
+const supabase = createClient(
+    process.env.SUPABASE_URL, 
+    process.env.SUPABASE_SERVICE_KEY
+)
+
+// Test route
+app.get('/', (req, res) => {
+  res.send('Express server is running')
+})
+
+// Upload route for uploading profile pictures
+app.post('/upload-profile-picture', upload.single('file'), async (req, res) => {
+    try {
+        const file = req.file
+        const userId = req.body.userId
+
+        if(!file) {
+            return res.status(400).json({ error: 'No file uploaded' })
+        }
+
+        if(!userId) {
+            return res.status(400).json({ error: 'User ID is required' })
+        }
+
+        // Upload image to Supabase Storage
+        const { data, error } = await supabase.storage
+            .from('profile-pictures')
+            .upload(`${userId}/${file.originalname}`, file.buffer, {
+                contentType: file.mimetype,
+                upsert: true
+            })
+        
+        if (error) {
+            console.error('Supabase upload error:', error)
+            return res.status(500).json({ error: 'Failed to upload file to Supabase' })
+        }
+
+        // Get public URL of the uploaded image
+        const {data: publicUrl} = supabase.storage
+            .from('profile-pictures')
+            .getPublicUrl(`${userId}/${file.originalname}`)
+        
+        // Update the profile row with the url
+        await supabase
+            .from('profiles')
+            .update({ profile_picture_url: publicUrl.publicUrl })
+            .eq('user_id', userId)
+        
+        res.json({
+            url: publicUrl.publicUrl
+        })
+
+    } catch (error) {
+        console.error('Error uploading file:', error)
+        res.status(500).json({ error: 'Failed to upload file' })
+    }
+})
