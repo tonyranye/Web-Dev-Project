@@ -7,14 +7,16 @@ import FitnessTracker from '../views/fitness_tracker.vue'
 import FoodTracker from '../views/food_tracker.vue'
 import ProfilePage from '../views/profile_page.vue'
 import LoginSignup from '../views/LoginSignup.vue'
+import LandingPage from '../views/landing_page.vue'
 
 const routes = [
-  { path: '/', component: Homepage },
+  { path: '/', component: LandingPage },
   { path: '/workouts', component: FitnessTracker },
   { path: '/profile', component: ProfilePage },
   { path: '/food_tracker', component: FoodTracker },
   { path: '/login', component: LoginSignup },
-  { path: '/logout', redirect: '/login' }
+  { path: '/logout', redirect: '/login' },
+  { path: '/home', component: Homepage }
 ]
 
 const router = createRouter({
@@ -23,20 +25,21 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const { data: { user } } = await supabase.auth.getUser()
-  const isAuthenticated = !!user
+  const { data: { session } } = await supabase.auth.getSession()
+  const isAuthenticated = !!session
 
-  // Public routes that don't require login
   const publicRoutes = ['/', '/login']
 
-  // If route requires auth and user is not logged in → redirect to login
   if (!publicRoutes.includes(to.path) && !isAuthenticated) {
     return next('/login')
   }
 
-  // If user is logged in and tries to go to login → redirect to profile
   if (to.path === '/login' && isAuthenticated) {
     return next('/profile')
+  }
+
+  if (to.path === '/' && isAuthenticated) {
+    return next('/home')
   }
 
   next()
