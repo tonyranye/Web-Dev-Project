@@ -25,9 +25,10 @@ const errorMessage = ref(null)
 
 
 function getTimeAgo(dateString) {
-  const pastDate = new Date(dateString)
+  const normalised = dateString.replace(' ', 'T') + 'Z'
+  const pastDate = new Date(normalised)
   const now = new Date()
-  const diffInSeconds = Math.abs(Math.floor((now - pastDate) / 1000)) // ✅ abs fixes negative
+  const diffInSeconds = Math.floor((now - pastDate) / 1000)
 
   if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`
 
@@ -37,8 +38,6 @@ function getTimeAgo(dateString) {
   const diffInHours = Math.floor(diffInMinutes / 60)
   return `${diffInHours} hours ago`
 }
-
-
 
 async function loadMostRecentMeal() {
   const { data: { user } } = await supabase.auth.getUser()
@@ -69,6 +68,7 @@ async function loadMostRecentMeal() {
     return // Keeps the default '-' values
   }
 
+  console.log('created_at raw:', data.created_at)
   // 3. Assign the values to all three slots
   localStats.value[0].value = data.name
   localStats.value[1].value = data.calories
