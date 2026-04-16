@@ -12,6 +12,8 @@
     <input type="text" id="lastname" v-model="lastname" required>
     <label for="username">Username:</label>
     <input type="text" id="username" v-model="username" required>
+    <label for="email">Email:</label>
+    <input type="text" id="email" v-model="email" required>
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Sign up</button>
@@ -22,8 +24,8 @@
 
 <div v-else>
 <form @submit.prevent="handleSubmit">
-    <label for="username">Username:</label>
-    <input type="text" id="username" v-model="username" required>
+    <label for="email">Email:</label>
+    <input type="text" id="email" v-model="email" required>
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Log in</button>
@@ -37,7 +39,7 @@
 
 <script>
 import { supabase } from '@/lib/supabase';
-
+import Navbar from '../components/navbar.vue'
 
 export default{
     data(){
@@ -47,53 +49,61 @@ export default{
             password: '',
             firstname: '',
             lastname: '',
+            age: 0,
+            height: 0,
+            weight: 0,
+            email: ''
         }
     },
     methods: {
         toggleForm(){
             this.isSignUp = !this.isSignUp;
         },
-        handleSubmit(){
+        async handleSubmit(){
             if(this.isSignUp){
                 // Handle sign up logic
                 console.log('Signing up...');
-                supabase.auth.signUp({
-                    email: this.username,
+
+                const { data, error } = await supabase.auth.signUp({
+                    email: this.email,
                     password: this.password,
-                    options: {
-                        data: {
-                            first_name: this.firstname,
-                            last_name: this.lastname,
-                        }
-                    }
-                }).then(({ user, error }) => {
-                    if (error) {
-                        console.error('Error signing up:', error.message);
-                    } else {
-                        console.log('User signed up:', user);
-                        // Optionally, you can redirect the user to the homepage or profile page
-                        this.$router.push('/profile')
-                    }
-                });
+                })
+
+                if (error) {
+                    console.error('Error signing up:', error.message)
+                    alert(error.message)
+                    return
+                }
+
+                const user = data.user
+
+                await supabase.from('profiles').insert({
+                user_id: user.id,
+                full_name: this.firstname + ' ' + this.lastname,
+                age: this.age,
+                height: this.height,
+                weight: this.weight
+                })
+
+                this.$router.push('/profile')
 
             } else {
                 // Handle log in logic
                 console.log('Logging in...');
-                supabase.auth.signInWithPassword({
-                    email: this.username,
-                    password: this.password,
-                }).then(({user, error}) => {
-                    if(error){
-                        console.error('Error logging in:', error.message);
-                    } else{
-                        console.log('User logged in:', user);
-                        // Optionally, you can redirect the user to the homepage or profile page
-                        this.$router.push('/profile')
-                    }
-                    }
-                );
-                
 
+                const {data, error} = await supabase.auth.signInWithPassword({
+                    email: this.email,
+                    password: this.password,
+                })
+
+                if (error) {
+                    console.error('Error logging in:', error.message)
+                    alert(error.message)
+                    return
+                }
+
+
+                this.$router.push('/profile')
             }
         }
     },
@@ -110,4 +120,5 @@ export default{
 
 
 
-<style></style>
+<style>
+</style>
