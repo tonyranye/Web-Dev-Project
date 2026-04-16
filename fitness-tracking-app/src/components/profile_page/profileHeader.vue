@@ -2,7 +2,7 @@
   <header class="profile-header">
     <div class="left">
       <img
-        :src="profile.profile_picture_url" || placeholder
+        :src="profile.profile_picture_url || placeholder"
         alt="Profile Picture"
         class="profile-pic"
       />
