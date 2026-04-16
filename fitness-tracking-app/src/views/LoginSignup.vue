@@ -17,7 +17,7 @@
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Sign up</button>
-    <button type="button" @click="toggleForm">Already have an account? Log in</button>
+    <button type="button" class="toggle-button" @click="toggleForm">Already have an account? Log in</button>
 </form>
 
 </div>
@@ -29,7 +29,7 @@
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Log in</button>
-    <button type="button" @click="toggleForm">Don't have an account? Sign up</button>
+    <button type="button" class=".toggle-button" @click="toggleForm">Don't have an account? Sign up</button>
 </form>
 
 </div>
@@ -121,4 +121,47 @@ export default{
 
 
 <style>
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 300px;
+    margin: auto;
+}
+
+.signup{
+    background-color: black;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    background-color: #4ade80;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+input {
+    background-color: black;
+    color: white;
+    border: 1px solid #444;
+    padding: 8px 16px;
+}
+
+button:hover {
+    background-color: #09391b;
+}
+.toggle-button {
+    background-color: transparent;
+    color: #4ade80;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+}
 </style>
