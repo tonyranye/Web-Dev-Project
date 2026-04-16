@@ -4,7 +4,6 @@
     <!--    The header card styling-->
     <div class="home-Header">
       <h2>Overview</h2>
-      <p>General stats the user sees when they login</p>
     </div>
 
     <div class="content-wrapper">
@@ -57,7 +56,7 @@ export default {
 <style scoped>
 
 .page{
-  padding: 15px;
+  padding: 5px;
 }
 
 .home-Header{

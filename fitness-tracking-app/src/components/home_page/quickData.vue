@@ -4,8 +4,12 @@
 
 <template>
   <div class="user-data">
-    <h2> {{profile.full_name}} </h2>
-    <router-link to="/profile">View Profile</router-link>
+    <img
+        src="@/assets/placeholder_profile_picture.webp"
+        alt="Profile Picture"
+        class="profile-pic"
+    />
+    <router-link id="link" to="/profile">View Profile</router-link>
     <br>
     <p>Age: <span> {{ profile.age }}  </span>   </p>
     <p>Height: <span> {{ profile.height }} cm </span></p>
@@ -24,22 +28,36 @@ export default {
   },
 
   async mounted() {
-    this.profile = await ProfileService()
+    this.profile = await ProfileService('profiles')
   },
 }
 </script>
 
 <style scoped>
 
-.user-data h2{
-  font-weight: bolder;
-  color: #f2f2f2;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.user-data{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+
+#link {
   padding-bottom: 12px;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.1);
 }
 
 .user-data p{
   font-weight: bold;;
+}
+
+.profile-pic {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #296b29;
 }
 
 </style>

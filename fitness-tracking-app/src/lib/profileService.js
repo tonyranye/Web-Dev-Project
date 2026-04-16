@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase.js'
 
-export async function ProfileService() {
+export async function ProfileService(table) {
     try {
         const {data: {user}, error: authError} = await supabase.auth.getUser()
 
@@ -9,7 +9,7 @@ export async function ProfileService() {
         }
 
         const { data, error: profileError } = await supabase
-            .from('profiles')
+            .from(table)
             .select('*')
             .eq('user_id', user.id)
             .single()
