@@ -10,3 +10,14 @@ Matthew
 9. Added the supabase integration to the food tracking page
 
 
+
+Isaac
+1.Built LoginSignup.vue with toggle between login and signup forms
+2. Integrated Supabase auth for signing up and logging in
+3. Implemented validation and v-model bindings on inputs
+4. Implemented a redirection feature to profile page after login/signup 
+5.Added a route protection using router.beforeEach navigation guard
+6. Styled login/signup page to match the app's design 
+7. Added a clickable logo in navbar that routes back to home page
+8. Added SVG logout icon to ProfileHeader.vue
+
