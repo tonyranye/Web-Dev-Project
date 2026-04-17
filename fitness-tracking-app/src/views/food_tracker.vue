@@ -57,10 +57,10 @@
           <p>No food logged yet. Start by adding your first entry!</p>
         </div>
         
-        <div v-for="entry in foodLog" :key="entry.id" class="food-card">
+        <div v-for="entry in foodLog" :key="entry.meal_id" class="food-card">
           <div class="card-header">
             <h3>{{ entry.name }}</h3>
-            <button @click="removeFoodEntry(entry.id)" class="delete-btn">✕</button>
+            <button @click="removeFoodEntry(entry.meal_id)" class="delete-btn">✕</button>
           </div>
           <div class="card-details">
             <p><strong>Calories:</strong> {{ entry.calories }}</p>
@@ -107,9 +107,7 @@
     </div>
   </div>
 </template>
-
 <script>
-// Import in supabase to use for uploading 
 import { supabase } from '@/lib/supabase'
 
 export default {
@@ -120,10 +118,10 @@ export default {
         calories: null,
         mealtime: ''
       },
-      foodLog: [],
-      nextId: 1
+      foodLog: []
     }
   },
+
   computed: {
     todayCalories() {
       return this.getCaloriesForDate(new Date());
@@ -148,6 +146,7 @@ export default {
       return Math.round(this.totalCalories / uniqueDays.size);
     }
   },
+
   methods: {
     async addFoodEntry() {
       if (!this.newFood.name || this.newFood.calories === null) {
@@ -155,18 +154,14 @@ export default {
         return;
       }
 
-      // Get current user
       const { data: userData, error: userError } = await supabase.auth.getUser();
-      // If there's an error or no user, throw the error
       if (userError || !userData.user) {
-        console.error('No user found:', userError);
         alert('You must be logged in to log food.');
         return;
-      } 
+      }
 
       const user = userData.user;
 
-      // Insert into Supabase "meals" table
       const { data, error } = await supabase
         .from('meals')
         .insert({
@@ -175,28 +170,25 @@ export default {
           calories: this.newFood.calories,
           mealtime: this.newFood.mealtime
         })
-        .select(); // returns the inserted row(s)
+        .select();
 
       if (error) {
-        console.error('Error inserting meal:', error);
-        alert('Failed to log food. Try again.');
+        console.error(error);
+        alert('Failed to log food.');
         return;
       }
 
       const inserted = data[0];
 
-
-      // Add to the local UI list (newest first)
       this.foodLog.unshift({
         ...inserted,
-        // ensure timestamp is a Date object for your formatters
         timestamp: new Date(inserted.created_at)
       });
 
-      // Reset the form
       this.newFood = {
         name: '',
-        calories: null
+        calories: null,
+        mealtime: ''
       };
     },
 
@@ -204,12 +196,14 @@ export default {
       this.foodLog = this.foodLog.filter(entry => entry.id !== id);
       this.saveFoodLog();
     },
+
     getCaloriesForDate(date) {
       const dateStr = this.formatDate(date);
       return this.foodLog
         .filter(entry => this.formatDate(entry.timestamp) === dateStr)
         .reduce((sum, entry) => sum + entry.calories, 0);
     },
+
     getCaloriesForWeek() {
       const today = new Date();
       const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -217,6 +211,7 @@ export default {
         .filter(entry => entry.timestamp >= weekAgo)
         .reduce((sum, entry) => sum + entry.calories, 0);
     },
+
     getWorkoutCaloriesForDate(date) {
       const dateStr = this.formatDate(date);
       const workoutLog = JSON.parse(localStorage.getItem('workoutLog') || '[]');
@@ -227,6 +222,7 @@ export default {
         })
         .reduce((sum, entry) => sum + (entry.caloriesBurned || 0), 0);
     },
+
     formatDate(timestamp) {
       const date = new Date(timestamp);
       return date.toLocaleDateString('en-US', { 
@@ -235,6 +231,7 @@ export default {
         year: 'numeric' 
       });
     },
+
     formatTime(timestamp) {
       const date = new Date(timestamp);
       return date.toLocaleTimeString('en-US', { 
@@ -243,35 +240,41 @@ export default {
         hour12: true
       });
     },
-    saveFoodLog() {
-      // Convert dates to strings for storage
-      const logToStore = this.foodLog.map(entry => ({
-        ...entry,
-        timestamp: entry.timestamp.toISOString()
-      }));
-      localStorage.setItem('foodLog', JSON.stringify(logToStore));
-    },
-    loadFoodLog() {
-      const stored = localStorage.getItem('foodLog');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        // Convert ISO strings back to Date objects
-        this.foodLog = parsed.map(entry => ({
-          ...entry,
-          timestamp: new Date(entry.timestamp)
-        }));
-        // Update nextId to avoid conflicts
-        if (this.foodLog.length > 0) {
-          this.nextId = Math.max(...this.foodLog.map(e => e.id)) + 1;
-        }
+
+    async loadRecentMeals() {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        console.error('No user found:', userError);
+        return;
       }
+
+      const user = userData.user;
+
+      const { data, error } = await supabase
+        .from('meals')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (error) {
+        console.error('Error loading meals:', error);
+        return;
+      }
+
+      this.foodLog = data.map(entry => ({
+        ...entry,
+        timestamp: new Date(entry.created_at)
+      }));
     }
   },
+
   mounted() {
-    this.loadFoodLog();
+    this.loadRecentMeals();
   }
 }
 </script>
+
 
 <style scoped>
 .food-tracker-container {
