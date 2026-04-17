@@ -1,6 +1,21 @@
 <template>
   <aside class="sidebar">
-    <div class="logo"><router-link to="/">🏋️‍♂️</router-link></div>
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+    
+      <rect x="2" y="10" width="5" height="12" rx="2" fill="white"/>
+      <rect x="25" y="10" width="5" height="12" rx="2" fill="white"/>
+
+      <rect x="21" y="12" width="4" height="8" rx="1.5" fill="white"/>
+      <rect x="7" y="12" width="4" height="8" rx="1.5" fill="white"/>
+      
+      <rect x="11" y="14.5" width="15" height="3" rx="1.5" fill="white"/>
+      
+      
+      
+      
+</svg>
+    </div>
 
     <nav class="menu">
       <router-link class="menu-item" to="/">
