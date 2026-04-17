@@ -192,11 +192,25 @@ export default {
       };
     },
 
-    removeFoodEntry(id) {
-      this.foodLog = this.foodLog.filter(entry => entry.id !== id);
-      this.saveFoodLog();
+    async removeFoodEntry(mealId) {
+      // Delete from Supabase
+      const { error } = await supabase
+        .from('meals')
+        .delete()
+        .eq('meal_id', mealId);
+
+      if (error) {
+        console.error("Error deleting meal:", error);
+        alert("Failed to delete meal.");
+        return;
+      }
+
+      // Remove from UI
+      this.foodLog = this.foodLog.filter(entry => entry.meal_id !== mealId);
     },
 
+    
+    // Summary stats for food tracking
     getCaloriesForDate(date) {
       const dateStr = this.formatDate(date);
       return this.foodLog
@@ -241,6 +255,7 @@ export default {
       });
     },
 
+    // Functions that load and upload meals
     async loadRecentMeals() {
       const { data: userData, error: userError } = await supabase.auth.getUser();
       if (userError || !userData.user) {
