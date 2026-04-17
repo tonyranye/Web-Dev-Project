@@ -78,3 +78,35 @@ Isabella:
 I'm having trouble understanding why the landing page is rerouting to the sign up page when clicking the sign in page
 Why is my D3 animation disappearing or duplicating when I navigate back to this page (landing page)
 How can I change the color of the 'Pulse' effect (landing page)
+
+
+Syeda: 
+-> I have a Vue composable for Supabase data fetching. How do I properly handle errors from .insert() and .select() calls so the user stays on the form instead of breaking the page?
+
+Wrap every Supabase call in a destructured { data, error } response and check the error before doing anything with the data. Never redirect or update UI state until you confirm success. For example:
+jsconst { data, error } = await supabase.from('activities').insert(payload).select().single()
+if (error) {
+  errorMessage.value = 'Could not save. Please try again.'
+  return false
+}
+// only update UI after confirmed success
+activities.value.unshift(data)
+return true
+This keeps the user on the form with a visible error instead of silently failing or navigating away.
+
+-> What is the D3.js equivalent of dynamically updating a bar chart when a reactive Vue ref changes? I have weekly activity data and want the bars to re-render on toggle between duration and calories.
+Use a watch on your reactive data and call your D3 draw function inside it. D3 doesn't know about Vue reactivity so you have to bridge them manually:
+jswatch([() => props.weeklyData, metric], () => nextTick(draw))
+Inside draw(), call d3.select(el).selectAll('*').remove() first to wipe the previous render, then redraw from scratch using the new metric value. nextTick ensures the DOM is updated before D3 tries to measure element dimensions.
+
+-> How do I structure per-field inline validation in Vue 3 using reactive() so each input shows its own error message on blur before the form submits?
+Keep a separate reactive object just for errors, one key per field. Attach a validateField(fieldName) function to each input's @blur event, and run all validations again on submit before allowing it through:
+jsconst fieldErrors = reactive({ name: '', category: '', duration: '', calories: '' })
+
+function validateField(field) {
+  fieldErrors[field] = ''
+  if (field === 'name' && !form.name.trim()) {
+    fieldErrors.name = 'Required.'
+  }
+}
+Then in the template bind :class="{ 'input-err': fieldErrors.name }" on the input and show <span v-if="fieldErrors.name">{{ fieldErrors.name }}</span> below it. On submit, run all fields through validateField first and bail if any errors exist.
