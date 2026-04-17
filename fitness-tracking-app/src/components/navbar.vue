@@ -12,6 +12,11 @@
         <i class="fa-solid fa-dumbbell"></i>
         <span>Workouts</span>
       </router-link>
+      
+      <router-link class="menu-item" to="/activity">
+        <i class="fa-solid fa-person-running"></i>
+        <span>Activities</span>
+      </router-link>
 
       <router-link class="menu-item" to="/food_tracker">
         <i class="fa-solid fa-chart-line"></i>

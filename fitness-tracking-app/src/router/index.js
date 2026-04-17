@@ -4,6 +4,7 @@ import { supabase} from '../lib/supabase'
 // Import your views
 import Homepage from '../views/homepage.vue'
 import FitnessTracker from '../views/fitness_tracker.vue'
+import activityPage from '../views/activityPage.vue'
 import FoodTracker from '../views/food_tracker.vue'
 import ProfilePage from '../views/profile_page.vue'
 import LoginSignup from '../views/LoginSignup.vue'
@@ -13,6 +14,7 @@ const routes = [
   { path: '/', component: LandingPage },
   { path: '/workouts', component: FitnessTracker },
   { path: '/profile', component: ProfilePage },
+  { path: '/activity', component: activityPage },
   { path: '/food_tracker', component: FoodTracker },
   { path: '/login', component: LoginSignup },
   { path: '/logout', redirect: '/login' },
