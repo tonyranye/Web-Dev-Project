@@ -15,19 +15,25 @@ This full-stack fitness tracking web application is designed to help users log, 
 SVG and HTML
 - Logo done in SVG and logout icon in SVG
 - HTML used throughout the project for the UI
+
 CSS and CSS frameworks
 - CSS used throughout the project for UI
+  
 JavaScript, jQuery, D3
 - JavaScript used throughout the project for the backend
 - JQuery Used to create daily tasks
 - D3 Used for animations in the landing page
+  
 Dynamic DOM
 - Components update automatically based on user actions
 - Components update automatically based on data pulled from SupaBase
+  
 AJAX, web services
 - AJAX-style asynchronous requrest are used to communicate with backend services
+  
 Node.js/Express.js/Nuxt-nitro
 - Node.js + Express.js is used to create a server allowing the user to submit their profile pictures to SupaBase
+  
 Vue framework 
 - The entire frontend is built using the Vue 3 framework
 ---
