@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 
 console.log("Starting server...")
-dotenv.config({ path: './server/.env' })
+dotenv.config({ path: './.env' })
 
 console.log("Loaded env:", process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
 
@@ -44,11 +44,15 @@ app.post('/upload-profile-picture', upload.single('file'), async (req, res) => {
             return res.status(400).json({ error: 'User ID is required' })
         }
 
+        const ext = file.originalname.split('.').pop();
+        const fileName = `${userId}-${Date.now()}.${ext}`;
+
+
         // Upload image to Supabase Storage, under the name
         // userId/imagename
         const { data, error } = await supabase.storage
             .from('profile-pictures')
-            .upload(`${userId}/${file.originalname}`, file.buffer, {
+            .upload(fileName, file.buffer, {
                 contentType: file.mimetype,
                 upsert: true
             })
@@ -62,17 +66,23 @@ app.post('/upload-profile-picture', upload.single('file'), async (req, res) => {
         // Get public URL of the uploaded image
         const {data: publicUrl} = supabase.storage
             .from('profile-pictures')
-            .getPublicUrl(`${userId}/${file.originalname}`)
+            .getPublicUrl(fileName)
         
         // Update the profile row with the url
-        await supabase
+        const { data: updateData, error: updateError } = await supabase
             .from('profiles')
             .update({ profile_picture_url: publicUrl.publicUrl })
             .eq('user_id', userId)
-        
+            .select();
+
+        // ⭐ SEND RESPONSE HERE — BEFORE ANY LOGGING THAT COULD CRASH ⭐
         res.json({
-            url: publicUrl.publicUrl
-        })
+            url: publicUrl.publicUrl,
+            updated: updateData
+        });
+
+        // Safe logging AFTER response
+        console.log("UPDATE DATA:", updateData);
 
     } catch (error) {
         console.error('Error uploading file:', error)

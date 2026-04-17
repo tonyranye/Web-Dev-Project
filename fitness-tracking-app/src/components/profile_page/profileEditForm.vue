@@ -63,6 +63,7 @@ async function uploadProfilePicture(file){
 
   // Set the profiles url to what we received
   props.profile.profile_picture_url = data.url
+  form.profile_picture_url = data.url
 }
 
 function submitForm() {
