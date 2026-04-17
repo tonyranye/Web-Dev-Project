@@ -18,6 +18,17 @@ Tony
 6. Implemented QuickData componenets displaying user data
 7. generated smaple data for meals, tasks, and activities tables
 
+
+Isaac
+1.Built LoginSignup.vue with toggle between login and signup forms
+2. Integrated Supabase auth for signing up and logging in
+3. Implemented validation and v-model bindings on inputs
+4. Implemented a redirection feature to profile page after login/signup 
+5.Added a route protection using router.beforeEach navigation guard
+6. Styled login/signup page to match the app's design 
+7. Added a clickable logo in navbar that routes back to home page
+8. Added SVG logout icon to ProfileHeader.vue
+
 Isabella
 1. Created Graph Component for home page
 2. Created landing page with D3 and SVG components
