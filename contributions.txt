@@ -4,6 +4,9 @@ Matthew
 3. Create the profile information display UI
 4. Created the profile editing backend and frontend
 5. Created an express server for uploading profile pictures to supabase
-
+6. Bug fixing with query's to and from the database
+7. General bug fixing and integration work
+8. Designed the scripts in package.json to install both the app, and server and run them concurrently
+9. Added the supabase integration to the food tracking page
 
 

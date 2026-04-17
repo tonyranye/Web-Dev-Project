@@ -7,10 +7,10 @@
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
       </router-link>
-
-      <router-link class="menu-item" to="/workouts">
-        <i class="fa-solid fa-dumbbell"></i>
-        <span>Workouts</span>
+      
+      <router-link class="menu-item" to="/activity">
+        <i class="fa-solid fa-person-running"></i>
+        <span>Activities</span>
       </router-link>
 
       <router-link class="menu-item" to="/food_tracker">

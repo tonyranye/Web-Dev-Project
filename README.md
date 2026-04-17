@@ -29,14 +29,24 @@ fitness-tracking-app/
 │   │   ├── main.css
 │   │   └── logo.svg
 │   ├── components/
+|   |   ├── activity/
+|   |   │       ├── ActivityLog.vue
+│   │   │       ├── CategoryBreakdown.vue
+│   │   │       ├── LogForm.vue
+│   │   │       ├── StatsBar.vue
+│   │   │       └── WeeklyChart.vue
+│   │   │
 │   │   ├── navbar.vue        # Sidebar navigation
 │   │   ├── overviewCard.vue  # Homepage stats overview
 │   │   └── icons/
+│   ├── composables/
+|   |    └── useActivity.js
 │   ├── router/
 │   │   └── index.js          # Route definitions
 │   ├── stores/
 │   │   └── counter.js        # Pinia store
 │   ├── views/
+│   │   ├── activityPage.vue
 │   │   ├── homepage.vue
 │   │   ├── fitness_tracker.vue
 │   │   ├── food_tracker.vue
@@ -57,6 +67,7 @@ fitness-tracking-app/
 |---|---|---|
 | `/` | `homepage.vue` | Dashboard with fitness overview |
 | `/workouts` | `fitness_tracker.vue` | Workout logging and tracking |
+| `/activity` | `activityPage.vue` | Activity logging and tracking |
 | `/food_tracker` | `food_tracker.vue` | Food and calorie tracking |
 | `/profile` | `profile_page.vue` | User profile and settings |
 

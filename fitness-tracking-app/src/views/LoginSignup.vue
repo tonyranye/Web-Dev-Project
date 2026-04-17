@@ -41,7 +41,7 @@ import { supabase } from '@/lib/supabase';
 export default{
     data(){
         return{
-            isSignUp: true,
+            isSignUp: false,
             username: '',
             password: '',
             firstname: '',
@@ -109,8 +109,21 @@ export default{
             return this.isSignUp ? 'Sign Up' : 'Log In';
         }
 
+    },
+
+    mounted() {
+        const mode = this.$route.query.mode;
+
+        if (mode === 'login') {
+            this.isSignUp = false
+        } else if (mode === 'signup') {
+            this.isSignUp = true
+        }
     }
 }
+
+
+
 
 </script>
 
