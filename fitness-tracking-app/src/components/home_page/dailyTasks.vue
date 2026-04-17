@@ -345,6 +345,10 @@ onMounted(() => loadDailyTasks())
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  max-height: 180px; /* You can adjust this height to fit your layout perfectly */
+  overflow-y: auto;
+  padding-right: 6px; /* Gives the scrollbar a little room */
 }
 
 .tasks li {

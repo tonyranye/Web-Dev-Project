@@ -95,4 +95,9 @@ export default {
   padding: 20px;
 }
 
+#tasks {
+  max-height: 390px;
+  ;
+}
+
 </style>
