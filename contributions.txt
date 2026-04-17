@@ -9,4 +9,12 @@ Matthew
 8. Designed the scripts in package.json to install both the app, and server and run them concurrently
 9. Added the supabase integration to the food tracking page
 
+Isabella
+1. Created Graph Component for home page
+2. Created landing page with D3 and SVG components
+3. Modified router to account new landing page
+4. Created SVG logo in corner of navbar
+5. Assisted in setting up supabase db ensuring that new users are authenticated 
+6. Made navbar hidden when user is not logged in
+
 
