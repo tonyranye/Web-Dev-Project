@@ -71,3 +71,10 @@ user_id,name,mealtime,calories,created_at,meal_id bc58142e-34e0-47f0-b812-5d8449
 tasks table 
 user_id,task_id,created_at,title,is_done,priority,is_repeating 
 bc58142e-34e0-47f0-b812-5d8449feb14c,8c5c3656-b44c-42d9-9d8f-d1dd12f39c85,2026-04-17 15:12:50+00,Study for exam (2 hours),false,high,true bc58142e-34e0-47f0-b812-5d8449feb14c,b6c16d8e-5f8b-4bd0-a868-7d75e9a5e34f,2026-04-17 15:12:51+00,Read for 10 minutes,false,low,true bc58142e-34e0-47f0-b812-5d8449feb14c,d48f712c-5eee-415f-9b10-72d56971ed82,2026-04-17 15:12:54+00,Go to the gym,false,medium,true
+
+
+Isabella:
+
+I'm having trouble understanding why the landing page is rerouting to the sign up page when clicking the sign in page
+Why is my D3 animation disappearing or duplicating when I navigate back to this page (landing page)
+How can I change the color of the 'Pulse' effect (landing page)
