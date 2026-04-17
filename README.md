@@ -2,7 +2,34 @@
 
 A Vue 3 single-page application for tracking fitness activity including workouts, food intake, and personal health metrics.
 
+This full-stack fitness tracking web application is designed to help users log, visualize, and analyze their daily health habits. It combines activity tracking, calorie logging, food tracking, daily task creation, progress analytics and profile management into a simple single-page application. This app uses a real-time Supabase database to handle user authentication and data storage, with Vue powering the UI to deliver a smooth user experience.
 
+## Features
+- Log workouts with duration, name, calories, category and notes
+- Track meals and daily caloric intake
+- View dynamic charts for weekly activity
+- Edit personal profile detials, and upload a profile picture
+- See real-time updates
+
+## Assignment Requirements
+SVG and HTML
+- Logo done in SVG and logout icon in SVG
+- HTML used throughout the project for the UI
+CSS and CSS frameworks
+- CSS used throughout the project for UI
+JavaScript, jQuery, D3
+- JavaScript used throughout the project for the backend
+- JQuery Used to create daily tasks
+- D3 Used for animations in the landing page
+Dynamic DOM
+- Components update automatically based on user actions
+- Components update automatically based on data pulled from SupaBase
+AJAX, web services
+- AJAX-style asynchronous requrest are used to communicate with backend services
+Node.js/Express.js/Nuxt-nitro
+- Node.js + Express.js is used to create a server allowing the user to submit their profile pictures to SupaBase
+Vue framework 
+- The entire frontend is built using the Vue 3 framework
 ---
 
 ## Tech Stack
