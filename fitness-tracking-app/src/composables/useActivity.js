@@ -61,6 +61,7 @@ export function useActivity() {
 
     const payload = {
       user_id: user.id,  
+      activity_name: form.name,
       activity_type: form.category,
       duration: parseInt(form.duration),
       calories: form.calories ? parseInt(form.calories) : null,
