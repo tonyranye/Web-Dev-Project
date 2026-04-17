@@ -5,9 +5,9 @@ import dotenv from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 
 console.log("Starting server...")
-dotenv.config({ path: './.env' })
+dotenv.config({ path: './..env' })
 
-console.log("Loaded env:", process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
+console.log("Loaded .env:", process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
 
 const app = express()
 app.use(cors())

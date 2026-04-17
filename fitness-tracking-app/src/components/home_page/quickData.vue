@@ -5,7 +5,7 @@
 <template>
   <div class="user-data">
     <img
-        src="@/assets/placeholder_profile_picture.webp"
+        :src="profile.profile_picture_url || placeholder"
         alt="Profile Picture"
         class="profile-pic"
     />
@@ -19,6 +19,7 @@
 
 <script>
 import { ProfileService } from '@/lib/profileService.js';
+import placeholder from "@/assets/placeholder_pfp_blue.avif";
 
 export default {
   data() {
