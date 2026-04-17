@@ -109,6 +109,59 @@ async function undoComplete() {
   undoSnapshot = null
 }
 
+const isCreatingTask = ref(false)
+
+// Function triggered by the new button
+function openCreateModal() {
+  // Clear out variables for a fresh task
+  editTitle.value = ''
+  editPriority.value = 'medium'
+  editIsDone.value = false
+  editIsRepeating.value = false
+
+  // Open your modal (you'll need to add a v-if="isCreatingTask" modal to your template)
+  isCreatingTask.value = true
+}
+
+function closeCreateModal() {
+  isCreatingTask.value = false
+}
+
+async function createNewTask() {
+  // 1. Get the current user
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  // 2. Prepare the task data
+  const newTaskData = {
+    user_id: user.id,
+    title: editTitle.value,
+    priority: editPriority.value,
+    is_done: editIsDone.value,
+    is_repeating: editIsRepeating.value
+  }
+
+  // 3. Close the modal right away so the UI feels snappy
+  closeCreateModal()
+
+  // 4. Send to Supabase
+  const { data, error } = await supabase
+      .from('tasks')
+      .insert(newTaskData)
+      .select()
+      .single()
+
+  if (error) {
+    console.error("Error creating task:", error.message)
+    return
+  }
+
+  // 5. Add the newly created task to your local array so it shows up on screen
+  if (data) {
+    tasks.value.push(data)
+  }
+}
+
 async function saveEdit() {
   const task = editingTask.value
   const original = {
@@ -140,7 +193,12 @@ onMounted(() => loadDailyTasks())
 <template>
 
   <div @click="closeMenu">
-    <div class="header">Daily Tasks</div>
+
+
+    <div class="header-container">
+      <div class="header">Daily Tasks</div>
+      <button class="btn-add" @click="openCreateModal">+ New Task</button>
+    </div>
 
     <div v-if="loading" class="loading-state">
       <span>Loading tasks...</span>
@@ -200,6 +258,36 @@ onMounted(() => loadDailyTasks())
       </div>
     </div>
 
+    <div v-if="isCreatingTask" class="modal-overlay" @click.self="closeCreateModal">
+      <div class="modal">
+        <h3>Create New Task</h3>
+        <label>Task name</label>
+        <input v-model="editTitle" type="text" placeholder="What needs to be done?" />
+
+        <label>Priority</label>
+        <select v-model="editPriority">
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+
+        <label class="checkbox-label">
+          <input type="checkbox" v-model="editIsDone" />
+          Mark as already completed
+        </label>
+
+        <label class="checkbox-label">
+          <input type="checkbox" v-model="editIsRepeating" />
+          Repeat daily
+        </label>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" @click="closeCreateModal">Cancel</button>
+          <button class="btn-save" @click="createNewTask">Create Task</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Snackbar -->
     <Transition name="snack">
       <div v-if="snackbar" class="snackbar">
@@ -216,7 +304,30 @@ onMounted(() => loadDailyTasks())
   font-size: 1rem;
   font-weight: 600;
   color: #e5e7eb;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 12px;
+}
+
+.btn-add {
+  background: #296b29;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background 0.15s ease-in-out;
+}
+
+.btn-add:hover {
+  background: #22c55e;
+  color: #111;
 }
 
 .loading-state,
