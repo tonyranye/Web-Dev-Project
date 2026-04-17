@@ -167,7 +167,7 @@ onBeforeUnmount(() => chartInstance.value?.destroy())
 </template>
 
 <style scoped>
-.graph-inner { display: flex; flex-direction: column; gap: 12px; }
+.graph-inner { display: flex; flex-direction: column; gap: 12px;}
 .graph-header { display: flex; justify-content: space-between; align-items: flex-start; }
 .graph-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
 .big-num { font-size: 32px; font-weight: 500; color: #fff; margin: 4px 0 2px; }
@@ -176,7 +176,7 @@ onBeforeUnmount(() => chartInstance.value?.destroy())
 .toggle-group { display: flex; gap: 4px; background: #0f1a0f; border-radius: 8px; padding: 3px; }
 .toggle-btn { font-size: 12px; padding: 4px 12px; border-radius: 6px; border: none; cursor: pointer; color: #6b7280; background: transparent; transition: all 0.2s; }
 .toggle-btn.active { background: #22c55e; color: #0a0f0d; font-weight: 500; }
-.chart-wrap { position: relative; height: 200px; width: 100%; }
+.chart-wrap { position: relative; min-height: 150px; width: 100%; }
 .legend { display: flex; gap: 16px; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #9ca3af; }
 .legend-dot { width: 10px; height: 10px; border-radius: 2px; }

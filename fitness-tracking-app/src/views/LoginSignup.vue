@@ -10,8 +10,6 @@
     <input type="text" id="firstname" v-model="firstname" required>
     <label for="lastname"> Last Name: </label>
     <input type="text" id="lastname" v-model="lastname" required>
-    <label for="username">Username:</label>
-    <input type="text" id="username" v-model="username" required>
     <label for="email">Email:</label>
     <input type="text" id="email" v-model="email" required>
     <label for="password"> Password:</label>
@@ -39,7 +37,6 @@
 
 <script>
 import { supabase } from '@/lib/supabase';
-import Navbar from '../components/navbar.vue'
 
 export default{
     data(){

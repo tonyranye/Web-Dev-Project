@@ -56,12 +56,9 @@ async function loadMostRecentMeal() {
       .limit(1)
       .maybeSingle()
 
-  if (error) {
-    console.error("Supabase Error:", error.message, error.details);
-    return
-  }
 
   if (error || !data) {
+    console.error("Supabase Error:", error.message, error.details);
     localStats.value[0].value = 'error'
     localStats.value[1].value = 'error'
     localStats.value[2].value = 'error'
@@ -116,7 +113,7 @@ onMounted(() => {
 
 .overview-item{
   padding: 0 20px;
-  border-right: 3px solid rgba(255, 255, 255, 0.1);;
+  border-right: 3px solid rgba(255, 255, 255, 0.1);
 }
 
 .overview-item:first-child { padding-left: 0; }

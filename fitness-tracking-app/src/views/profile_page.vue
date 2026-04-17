@@ -46,7 +46,7 @@ export default {
 
   // instead, just call function and assign it directly to the variable
   async mounted() {
-    this.profile = await ProfileService()
+    this.profile = await ProfileService('profiles')
   },
 
   methods: {
@@ -58,13 +58,13 @@ export default {
         .update(updated)
         .eq('user_id', user.id)
 
-      this.profile = await ProfileService()
+      this.profile = await ProfileService('profiles')
       this.editing = false
     },
 
     async logout() {
       await supabase.auth.signOut()
-      this.$router.push('/login')
+      this.$router.push('/')
     }
   }
 }
