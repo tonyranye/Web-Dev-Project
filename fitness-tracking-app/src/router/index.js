@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { supabase} from '../lib/supabase'
+import { supabase } from '../lib/supabase'
 
-// Import your views
 import Homepage from '../views/homepage.vue'
 import FitnessTracker from '../views/fitness_tracker.vue'
 import FoodTracker from '../views/food_tracker.vue'
@@ -24,7 +23,7 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
   const { data: { session } } = await supabase.auth.getSession()
   const isAuthenticated = !!session
 
@@ -39,10 +38,10 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.path === '/' && isAuthenticated) {
-    return next('/home')
+    return '/home'
   }
 
-  next()
+  return true
 })
 
 export default router
