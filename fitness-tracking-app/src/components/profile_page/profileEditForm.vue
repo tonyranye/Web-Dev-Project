@@ -23,6 +23,8 @@
         <input v-model.number="form.weight" type="number" />
       </div>
 
+      <input type="file" @change="e => uploadProfilePicture(e.target.files[0])" />
+
       <div class="buttons">
         <button type="submit" class="save">Save</button>
         <button type="button" class="cancel" @click="$emit('cancel')">Cancel</button>
@@ -43,6 +45,26 @@ const props = defineProps({
 
 // Local editable copy
 const form = reactive({ ...props.profile })
+
+async function uploadProfilePicture(file){
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('userId', props.profile.user_id);
+
+  // Send the POST request to the server that uploads the profile picture to the server
+  // We give it the data of formData which has the file and userid
+  const res = await fetch('http://localhost:3000/upload-profile-picture', {
+    method: 'POST',
+    body: formData
+  })
+
+  // Wait to receive the json back 
+  const data = await res.json();
+
+  // Set the profiles url to what we received
+  props.profile.profile_picture_url = data.url
+  form.profile_picture_url = data.url
+}
 
 function submitForm() {
   // Emit updated data to parent

@@ -1,7 +1,9 @@
 Matthew
 1. Designed navbar component
-2. Setup mongodb for groupmates to use
-3. Setup Express for groupmates to use
-4. Setup Axios for groupmates to use
+2. Setup initial supabase SQL db (made the tables, and imported the API key, and the RLS policy)
+3. Create the profile information display UI
+4. Created the profile editing backend and frontend
+5. Created an express server for uploading profile pictures to supabase
+
 
 
