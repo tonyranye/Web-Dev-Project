@@ -4,10 +4,14 @@ import multer from 'multer'
 import dotenv from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 
-dotenv.config()
+console.log("Starting server...")
+dotenv.config({ path: './server/.env' })
+
+console.log("Loaded env:", process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
 
 const app = express()
 app.use(cors())
+
 app.use(express.json())
 
 // Multer setup for file uploads
@@ -30,15 +34,18 @@ app.post('/upload-profile-picture', upload.single('file'), async (req, res) => {
         const file = req.file
         const userId = req.body.userId
 
+        // Error if file doesn't exist
         if(!file) {
             return res.status(400).json({ error: 'No file uploaded' })
         }
 
+        // Error if user id isn't available
         if(!userId) {
             return res.status(400).json({ error: 'User ID is required' })
         }
 
-        // Upload image to Supabase Storage
+        // Upload image to Supabase Storage, under the name
+        // userId/imagename
         const { data, error } = await supabase.storage
             .from('profile-pictures')
             .upload(`${userId}/${file.originalname}`, file.buffer, {
@@ -46,6 +53,7 @@ app.post('/upload-profile-picture', upload.single('file'), async (req, res) => {
                 upsert: true
             })
         
+        // Throw an error if the upload fails
         if (error) {
             console.error('Supabase upload error:', error)
             return res.status(500).json({ error: 'Failed to upload file to Supabase' })
@@ -71,3 +79,5 @@ app.post('/upload-profile-picture', upload.single('file'), async (req, res) => {
         res.status(500).json({ error: 'Failed to upload file' })
     }
 })
+
+app.listen(3000, () => console.log('Server running on port 3000'))
