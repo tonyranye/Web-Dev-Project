@@ -14,7 +14,7 @@
         </svg>
       </div>
       <h1 class="title">Fitness<span class="accent">Tracker</span></h1>
-      <p class="slogan">insert slogan here</p>
+      <p class="slogan">Track your fitness journey with ease</p>
       <div class="divider" />
       <div class="auth-section">
         <p class="auth-prompt">Have an account?</p>
@@ -55,7 +55,7 @@ export default {
 
   methods: {
     goTo(mode) {
-      this.$router.push({ path: '/login', query: { mode } })
+      this.$router.push(`/login?mode=${mode}`)
     },
 
     onResize() {
