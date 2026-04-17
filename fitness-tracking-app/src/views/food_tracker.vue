@@ -270,7 +270,7 @@ export default {
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(20);
+        .limit(5);
 
       if (error) {
         console.error('Error loading meals:', error);
@@ -539,10 +539,12 @@ export default {
   background: #2a2a2a;
   border: 2px solid #4CAF50;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 0.2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   text-align: center;
   transition: all 0.3s ease;
+  height: 140px;
+  width: 300px;
 }
 
 .stat-card:hover {

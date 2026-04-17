@@ -29,7 +29,7 @@ const barColor = computed(() => {
   const pct = progressPct.value
   if (pct < 70)  return '#22c55e'
   if (pct < 90)  return '#f59e0b'
-  return '#ef4444'
+  return '#22C55EFF'
 })
 
 // Data fetching

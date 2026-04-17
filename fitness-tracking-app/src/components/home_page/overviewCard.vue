@@ -87,10 +87,6 @@ onMounted(() => {
     >
       <p class="label">{{ stat.label }}</p>
       <p class="value"> {{stat.value}}</p>
-      <span class="change" :class="stat.arrow">
-        <span class="arrow"></span>
-        {{ stat.change }}
-      </span>
     </div>
   </div>
 </template>
