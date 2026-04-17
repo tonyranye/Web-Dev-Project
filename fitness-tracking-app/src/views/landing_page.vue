@@ -189,7 +189,6 @@ export default {
   font-family: 'Inter', sans-serif;
 }
 
-/* D3 SVG sits behind everything */
 .bg-svg {
   position: absolute;
   inset: 0;

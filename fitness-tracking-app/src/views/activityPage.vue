@@ -67,7 +67,7 @@ const streak = ref(0)
 const ranges = [
   { label: 'Daily',   value: 'daily'   },
   { label: 'Weekly',  value: 'weekly'  },
-  { label: 'Monthly', value: 'monthly' }
+  //{ label: 'Monthly', value: 'monthly' }
 ]
 
 async function switchRange(val) {

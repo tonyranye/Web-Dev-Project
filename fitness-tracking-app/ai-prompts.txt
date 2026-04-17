@@ -1,0 +1,73 @@
+Matthew: 
+
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = 
+const supabaseKey = 
+export const supabase = createClient(supabaseUrl, supabaseKey)
+
+right now i have the file src/lib/supabase.js handling my importing of supabase, if I add this server/index.js, would I have to change how my code handles supabase? Or is it just changing the path of import { supabase } from '@/lib/supabase'
+
+import express from 'express'
+import cors from 'cors'
+import multer from 'multer'
+import dotenv from 'dotenv'
+import { createClient } from '@supabase/supabase-js'
+
+dotenv.config()
+
+const app = express()
+app.use(cors())
+app.use(express.json())
+
+// Multer setup for file uploads
+const upload = multer({storage: multer.memoryStorage()})
+
+// Supabase client setup
+const supabase = createClient(
+    'example url', 
+    'example key'
+)
+
+would server/index.js be like this
+
+// Local reactive copy of stats (so we can modify it)
+const localStats = ref([...props.stats])
+
+const meal = ref(null)
+const errorMessage = ref(null)
+
+async function loadMeal(mealId) {
+  const { data, error } = await supabase
+    .from('meals')
+    .select('name, calories')
+    .eq('meal_id', mealId)
+    .single()
+
+  if (error || !data) {
+    localStats.value[0].value = '-'
+    return
+  }
+
+  localStats.value[0].value = data.calories
+}
+
+
+onMounted(() => {
+  loadMeal('74f5fe99-575f-495b-8a32-69c6b779ca4e')
+})
+
+is there a way i can grab the most recent meal associated to the user_id of the person logged in
+
+
+
+Tony:
+
+given this is the structure of my supabas tasks table aswell as my meals table. Create 2 csv with data spanning the last 3 months. Im testing to see how accurate the data pulls are with my project.
+
+meals table 
+user_id,name,mealtime,calories,created_at,meal_id bc58142e-34e0-47f0-b812-5d8449feb14c,Osmow's On the Rocks,Lunch,700,2026-04-17 12:00:36,169eb12f-0640-452f-a153-053b6ee30a62 bc58142e-34e0-47f0-b812-5d8449feb14c,Big mac,dinner,600,2026-04-17 18:41:12.097564,b73f64df-0031-491c-847e-2b016df88735 
+
+tasks table 
+user_id,task_id,created_at,title,is_done,priority,is_repeating 
+bc58142e-34e0-47f0-b812-5d8449feb14c,8c5c3656-b44c-42d9-9d8f-d1dd12f39c85,2026-04-17 15:12:50+00,Study for exam (2 hours),false,high,true bc58142e-34e0-47f0-b812-5d8449feb14c,b6c16d8e-5f8b-4bd0-a868-7d75e9a5e34f,2026-04-17 15:12:51+00,Read for 10 minutes,false,low,true bc58142e-34e0-47f0-b812-5d8449feb14c,d48f712c-5eee-415f-9b10-72d56971ed82,2026-04-17 15:12:54+00,Go to the gym,false,medium,true
