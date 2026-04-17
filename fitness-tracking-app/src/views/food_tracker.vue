@@ -36,6 +36,16 @@
               required
             />
           </div>
+
+          <div class="form-group">
+            <label for="mealtime">Mealtime</label>
+            <select id="mealtime" v-model="newFood.mealtime" required>
+              <option disabled value="">Select mealtime</option>
+              <option>breakfast</option>
+              <option>lunch</option>
+              <option>dinner</option>
+            </select>
+          </div>
           
           <button type="submit" class="submit-btn">Log Food</button>
         </form>
@@ -99,12 +109,16 @@
 </template>
 
 <script>
+// Import in supabase to use for uploading 
+import { supabase } from '@/lib/supabase'
+
 export default {
   data() {
     return {
       newFood: {
         name: '',
-        calories: null
+        calories: null,
+        mealtime: ''
       },
       foodLog: [],
       nextId: 1
@@ -135,31 +149,57 @@ export default {
     }
   },
   methods: {
-    addFoodEntry() {
+    async addFoodEntry() {
       if (!this.newFood.name || this.newFood.calories === null) {
         alert('Please fill in all fields');
         return;
       }
 
-      const entry = {
-        id: this.nextId++,
-        name: this.newFood.name,
-        calories: this.newFood.calories,
-        timestamp: new Date()
-      };
+      // Get current user
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      // If there's an error or no user, throw the error
+      if (userError || !userData.user) {
+        console.error('No user found:', userError);
+        alert('You must be logged in to log food.');
+        return;
+      } 
 
-      // Add to beginning of array so newest entries appear first
-      this.foodLog.unshift(entry);
+      const user = userData.user;
 
-      // Reset form
+      // Insert into Supabase "meals" table
+      const { data, error } = await supabase
+        .from('meals')
+        .insert({
+          user_id: user.id,
+          name: this.newFood.name,
+          calories: this.newFood.calories,
+          mealtime: this.newFood.mealtime
+        })
+        .select(); // returns the inserted row(s)
+
+      if (error) {
+        console.error('Error inserting meal:', error);
+        alert('Failed to log food. Try again.');
+        return;
+      }
+
+      const inserted = data[0];
+
+
+      // Add to the local UI list (newest first)
+      this.foodLog.unshift({
+        ...inserted,
+        // ensure timestamp is a Date object for your formatters
+        timestamp: new Date(inserted.created_at)
+      });
+
+      // Reset the form
       this.newFood = {
         name: '',
         calories: null
       };
-
-      // Save to localStorage
-      this.saveFoodLog();
     },
+
     removeFoodEntry(id) {
       this.foodLog = this.foodLog.filter(entry => entry.id !== id);
       this.saveFoodLog();
@@ -328,6 +368,39 @@ export default {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
   background: #2a2a2a;
 }
+
+.form-group select {
+  padding: 0.75rem;
+  border: 2px solid #3a3a3a;
+  background: #333;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  appearance: none; /* removes default arrow */
+  cursor: pointer;
+}
+
+/* Add a custom arrow */
+.form-group select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  background: #2a2a2a;
+}
+
+.form-group select option {
+  background: #2a2a2a;
+  color: #fff;
+}
+
 
 .submit-btn {
   padding: 0.75rem 1.5rem;
