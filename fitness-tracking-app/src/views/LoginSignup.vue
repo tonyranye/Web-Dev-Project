@@ -10,14 +10,12 @@
     <input type="text" id="firstname" v-model="firstname" required>
     <label for="lastname"> Last Name: </label>
     <input type="text" id="lastname" v-model="lastname" required>
-    <label for="username">Username:</label>
-    <input type="text" id="username" v-model="username" required>
     <label for="email">Email:</label>
     <input type="text" id="email" v-model="email" required>
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Sign up</button>
-    <button type="button" @click="toggleForm">Already have an account? Log in</button>
+    <button type="button" class="toggle-button" @click="toggleForm">Already have an account? Log in</button>
 </form>
 
 </div>
@@ -29,7 +27,7 @@
     <label for="password"> Password:</label>
     <input type="password" id="password" v-model="password" required>
     <button type= "submit"> Log in</button>
-    <button type="button" @click="toggleForm">Don't have an account? Sign up</button>
+    <button type="button" class=".toggle-button" @click="toggleForm">Don't have an account? Sign up</button>
 </form>
 
 </div>
@@ -39,7 +37,6 @@
 
 <script>
 import { supabase } from '@/lib/supabase';
-import Navbar from '../components/navbar.vue'
 
 export default{
     data(){
@@ -52,6 +49,7 @@ export default{
             age: 0,
             height: 0,
             weight: 0,
+            email: ''
         }
     },
     methods: {
@@ -70,6 +68,7 @@ export default{
 
                 if (error) {
                     console.error('Error signing up:', error.message)
+                    alert(error.message)
                     return
                 }
 
@@ -96,6 +95,7 @@ export default{
 
                 if (error) {
                     console.error('Error logging in:', error.message)
+                    alert(error.message)
                     return
                 }
 
@@ -118,4 +118,47 @@ export default{
 
 
 <style>
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 300px;
+    margin: auto;
+}
+
+.signup{
+    background-color: black;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    background-color: #4ade80;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+input {
+    background-color: black;
+    color: white;
+    border: 1px solid #444;
+    padding: 8px 16px;
+}
+
+button:hover {
+    background-color: #09391b;
+}
+.toggle-button {
+    background-color: transparent;
+    color: #4ade80;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+}
 </style>

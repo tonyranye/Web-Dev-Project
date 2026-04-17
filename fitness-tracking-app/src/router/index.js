@@ -31,11 +31,11 @@ router.beforeEach(async (to, from, next) => {
   const publicRoutes = ['/', '/login']
 
   if (!publicRoutes.includes(to.path) && !isAuthenticated) {
-    return next('/login')
+    return '/login'
   }
 
   if (to.path === '/login' && isAuthenticated) {
-    return next('/profile')
+    return '/profile'
   }
 
   if (to.path === '/' && isAuthenticated) {

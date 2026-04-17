@@ -11,28 +11,27 @@
 
       <div class="main-content">
 
-        <section class="overview">
+        <section class="card" id="overview">
           <overview-card />
         </section>
 
-        <section class="Graph">
+        <section class="card" id="Graph">
           <graph-component />
         </section>
 
-        <section class="tasks">
+        <section class="card" id="tasks">
           <daily-tasks />
         </section>
+
       </div>
 
-      <base-card class="card">
-        <h2>USER DATA </h2>
-        <br>
-        <p>link to profile page</p>
-        <p>Age: 20 </p>
-        <p>Height: 1.60cm</p>
-        <p>Weight: 170 lbs</p>
+      <div class="right-content">
 
-      </base-card>
+        <section class="card">
+          <QuickData/>
+        </section>
+
+      </div>
 
     </div>
 
@@ -40,18 +39,17 @@
 </template>
 
 <script>
-import OverviewCard from "@/components/overviewCard.vue";
-import GraphComponent  from "@/components/graphComponent.vue";
-import DailyTasks from "@/components/dailyTasks.vue";
-import BaseCard from "@/components/baseCard.vue";
-
+import OverviewCard from "@/components/home_page/overviewCard.vue";
+import GraphComponent  from "@/components/home_page/graphComponent.vue";
+import DailyTasks from "@/components/home_page/dailyTasks.vue";
+import QuickData from "@/components/home_page/quickData.vue";
 export default {
   name: 'Homepage',
   components: {
     DailyTasks,
     OverviewCard,
     GraphComponent,
-    BaseCard,
+    QuickData
   },
 }
 </script>
@@ -77,33 +75,11 @@ export default {
   gap: 24px;
 }
 
-.Graph{
-  background: #1a2e1a;
-  border-radius: 12px;
-  border: #296b29 2px solid;
-  padding: 20px;
-
-}
-
-.tasks{
+.card{
   background: #1a2e1a;
   border-radius: 12px;
   border: #296b29 2px solid;
   padding: 20px;
 }
-
-
-
-
-
 
 </style>
-
-
-<!--.side-content{
-  width: 280px;
-  background: #1a2e1a;
-  border-radius: 12px;
-  border: #296b29 2px solid;
-  padding: 20px;
-}-->

@@ -2,37 +2,36 @@
   <header class="profile-header">
     <div class="left">
       <img
-        src="@/assets/placeholder_profile_picture.webp"
+        :src="profile.profile_picture_url || placeholder"
         alt="Profile Picture"
         class="profile-pic"
       />
 
       <div class="info">
-        <h1>{{ fullName }}</h1>
-        <h3>@{{ username }}</h3>
+        <h1>{{ profile.full_name }}</h1>
+        <h3>@{{ profile.user_id }}</h3>
       </div>
     </div>
 
-    <button class="logout-btn" @click="$emit('logout')">
+    <button class="logout-btn" @click="emit('logout')">
       Logout
     </button>
   </header>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import placeholder from '@/assets/placeholder_pfp_blue.avif'
 
 const props = defineProps({
-  fullName: {
-    type: String,
-    required: true
-  },
-  username: {
-    type: String,
+  profile: {
+    type: Object,
     required: true
   }
 })
+
+const emit = defineEmits(['logout'])
 </script>
+
 
 <style scoped>
 .profile-header {

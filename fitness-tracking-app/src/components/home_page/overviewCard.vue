@@ -2,7 +2,7 @@
 
 // Importing and implementation of supabase db
 import { ref, onMounted } from 'vue'
-import { supabase } from '../lib/supabase'
+import { supabase } from '@/lib/supabase.js'
 
 
 // Importing and implementation of supabase db
@@ -11,50 +11,68 @@ const props = defineProps({
   stats: {
     type: Array,
     default: () => [
-      { label: 'Name', value: '-' },
-      { label: 'Meal', value: '-' , change: '-5%', arrow: 'down' },
+      { label: 'Most Recent Meal', value: '-' },
+      { label: 'Calories', value: '-' , change: '-5%', arrow: 'down' },
+      {label: 'Logged', value: '-'},
     ]
   }
 })
 
 // Local reactive copy of stats (so we can modify it)
 const localStats = ref([...props.stats])
-
 const meal = ref(null)
 const errorMessage = ref(null)
 
 
+function getTimeAgo(dateString) {
+  const normalised = dateString.replace(' ', 'T') + 'Z'
+  const pastDate = new Date(normalised)
+  const now = new Date()
+  const diffInSeconds = Math.floor((now - pastDate) / 1000)
 
+  if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`
 
+  const diffInMinutes = Math.floor(diffInSeconds / 60)
+  if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`
 
+  const diffInHours = Math.floor(diffInMinutes / 60)
+  return `${diffInHours} hours ago`
+}
 
 async function loadMostRecentMeal() {
-  // get logged-in user
   const { data: { user } } = await supabase.auth.getUser()
+  console.log('Current user:', user)
 
   if (!user) {
-    localStats.value[0].value = '-'
-    localStats.value[1].value = '-'
+    console.log("No user is currently logged in.");
     return
   }
 
-  // fetch most recent meal
   const { data, error } = await supabase
-    .from('meals')
-    .select('name, calories')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
+      .from('meals')
+      .select('name, calories, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+  if (error) {
+    console.error("Supabase Error:", error.message, error.details);
+    return
+  }
 
   if (error || !data) {
-    localStats.value[0].value = '-'
-    localStats.value[1].value = '-'
-    return
+    localStats.value[0].value = 'error'
+    localStats.value[1].value = 'error'
+    localStats.value[2].value = 'error'
+    return // Keeps the default '-' values
   }
 
+  console.log('created_at raw:', data.created_at)
+  // 3. Assign the values to all three slots
   localStats.value[0].value = data.name
   localStats.value[1].value = data.calories
+  localStats.value[2].value = getTimeAgo(data.created_at) // Passes the timestamp to the helper
 }
 
 onMounted(() => {
@@ -63,20 +81,6 @@ onMounted(() => {
 
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <template>
   <div class="overview-card">
@@ -103,20 +107,16 @@ onMounted(() => {
 
 <style scoped>
 
-.card{
-  background: #1a2e1a;
-  border-radius: 12px;
-  border: #296b29 2px solid;
-  padding: 20px 23px;
+
+
+.overview-card{
   display: flex;
-  gap: 0;
+  align-items: center;
 }
 
 .overview-item{
-  flex: 1;
   padding: 0 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);;
-
+  border-right: 3px solid rgba(255, 255, 255, 0.1);;
 }
 
 .overview-item:first-child { padding-left: 0; }
