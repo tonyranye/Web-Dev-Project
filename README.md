@@ -1,4 +1,4 @@
-# Fitness Tracking App
+# Fitness Tracker
 
 A Vue 3 single-page application for tracking fitness activity including workouts, food intake, and personal health metrics.
 
