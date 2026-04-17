@@ -22,6 +22,8 @@
           <daily-tasks />
         </section>
 
+
+
       </div>
 
       <div class="right-content">
@@ -30,6 +32,9 @@
           <QuickData/>
         </section>
 
+        <section class="card" id="calorie-bar">
+          <calorie-tracker />
+        </section>
       </div>
 
     </div>
@@ -42,13 +47,16 @@ import OverviewCard from "@/components/home_page/overviewCard.vue";
 import GraphComponent  from "@/components/home_page/graphComponent.vue";
 import DailyTasks from "@/components/home_page/dailyTasks.vue";
 import QuickData from "@/components/home_page/quickData.vue";
+import CalorieTracker from "@/components/home_page/CalorieTracker.vue";
 export default {
   name: 'Homepage',
   components: {
     DailyTasks,
     OverviewCard,
     GraphComponent,
-    QuickData
+    QuickData,
+    CalorieTracker,
+
   },
 }
 </script>
@@ -74,11 +82,22 @@ export default {
   gap: 24px;
 }
 
+.right-content{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .card{
   background: #1a2e1a;
   border-radius: 12px;
   border: #296b29 2px solid;
   padding: 20px;
+}
+
+#tasks {
+  max-height: 390px;
+  ;
 }
 
 </style>
