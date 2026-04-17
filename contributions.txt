@@ -26,4 +26,13 @@ Isabella
 5. Assisted in setting up supabase db ensuring that new users are authenticated 
 6. Made navbar hidden when user is not logged in
 
-
+Syeda
+1. Designed the Activity Tracker page layout with daily/weekly range toggle.
+2. Created useActivity.js composable to manage activity state and Supabase queries.
+3. Built the StatsBar component to display today's activity count, total duration, calories, and streak.
+4. Built the WeeklyChart component to visualize activity across the week.
+5. Built the CategoryBreakdown component showing per-category minute totals and percentages.
+6. Built the LogForm component for logging new activities with full form validation (name length, duration limits, calorie bounds, notes length).
+7. Built the ActivityLog component to display and delete today's activities.
+8. Implemented Supabase integration for the activities table (fetch by range, insert with user_id, delete).
+9. Added computed stats (today's totals, category breakdown, weekly data) driven reactively from Supabase data. 
