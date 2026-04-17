@@ -36,6 +36,16 @@
               required
             />
           </div>
+
+          <div class="form-group">
+            <label for="mealtime">Mealtime</label>
+            <select id="mealtime" v-model="newFood.mealtime" required>
+              <option disabled value="">Select mealtime</option>
+              <option>breakfast</option>
+              <option>lunch</option>
+              <option>dinner</option>
+            </select>
+          </div>
           
           <button type="submit" class="submit-btn">Log Food</button>
         </form>
@@ -47,10 +57,10 @@
           <p>No food logged yet. Start by adding your first entry!</p>
         </div>
         
-        <div v-for="entry in foodLog" :key="entry.id" class="food-card">
+        <div v-for="entry in foodLog" :key="entry.meal_id" class="food-card">
           <div class="card-header">
             <h3>{{ entry.name }}</h3>
-            <button @click="removeFoodEntry(entry.id)" class="delete-btn">✕</button>
+            <button @click="removeFoodEntry(entry.meal_id)" class="delete-btn">✕</button>
           </div>
           <div class="card-details">
             <p><strong>Calories:</strong> {{ entry.calories }}</p>
@@ -97,19 +107,21 @@
     </div>
   </div>
 </template>
-
 <script>
+import { supabase } from '@/lib/supabase'
+
 export default {
   data() {
     return {
       newFood: {
         name: '',
-        calories: null
+        calories: null,
+        mealtime: ''
       },
-      foodLog: [],
-      nextId: 1
+      foodLog: []
     }
   },
+
   computed: {
     todayCalories() {
       return this.getCaloriesForDate(new Date());
@@ -134,42 +146,78 @@ export default {
       return Math.round(this.totalCalories / uniqueDays.size);
     }
   },
+
   methods: {
-    addFoodEntry() {
+    async addFoodEntry() {
       if (!this.newFood.name || this.newFood.calories === null) {
         alert('Please fill in all fields');
         return;
       }
 
-      const entry = {
-        id: this.nextId++,
-        name: this.newFood.name,
-        calories: this.newFood.calories,
-        timestamp: new Date()
-      };
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        alert('You must be logged in to log food.');
+        return;
+      }
 
-      // Add to beginning of array so newest entries appear first
-      this.foodLog.unshift(entry);
+      const user = userData.user;
 
-      // Reset form
+      const { data, error } = await supabase
+        .from('meals')
+        .insert({
+          user_id: user.id,
+          name: this.newFood.name,
+          calories: this.newFood.calories,
+          mealtime: this.newFood.mealtime
+        })
+        .select();
+
+      if (error) {
+        console.error(error);
+        alert('Failed to log food.');
+        return;
+      }
+
+      const inserted = data[0];
+
+      this.foodLog.unshift({
+        ...inserted,
+        timestamp: new Date(inserted.created_at)
+      });
+
       this.newFood = {
         name: '',
-        calories: null
+        calories: null,
+        mealtime: ''
       };
+    },
 
-      // Save to localStorage
-      this.saveFoodLog();
+    async removeFoodEntry(mealId) {
+      // Delete from Supabase
+      const { error } = await supabase
+        .from('meals')
+        .delete()
+        .eq('meal_id', mealId);
+
+      if (error) {
+        console.error("Error deleting meal:", error);
+        alert("Failed to delete meal.");
+        return;
+      }
+
+      // Remove from UI
+      this.foodLog = this.foodLog.filter(entry => entry.meal_id !== mealId);
     },
-    removeFoodEntry(id) {
-      this.foodLog = this.foodLog.filter(entry => entry.id !== id);
-      this.saveFoodLog();
-    },
+
+    
+    // Summary stats for food tracking
     getCaloriesForDate(date) {
       const dateStr = this.formatDate(date);
       return this.foodLog
         .filter(entry => this.formatDate(entry.timestamp) === dateStr)
         .reduce((sum, entry) => sum + entry.calories, 0);
     },
+
     getCaloriesForWeek() {
       const today = new Date();
       const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -177,6 +225,7 @@ export default {
         .filter(entry => entry.timestamp >= weekAgo)
         .reduce((sum, entry) => sum + entry.calories, 0);
     },
+
     getWorkoutCaloriesForDate(date) {
       const dateStr = this.formatDate(date);
       const workoutLog = JSON.parse(localStorage.getItem('workoutLog') || '[]');
@@ -187,6 +236,7 @@ export default {
         })
         .reduce((sum, entry) => sum + (entry.caloriesBurned || 0), 0);
     },
+
     formatDate(timestamp) {
       const date = new Date(timestamp);
       return date.toLocaleDateString('en-US', { 
@@ -195,6 +245,7 @@ export default {
         year: 'numeric' 
       });
     },
+
     formatTime(timestamp) {
       const date = new Date(timestamp);
       return date.toLocaleTimeString('en-US', { 
@@ -203,35 +254,42 @@ export default {
         hour12: true
       });
     },
-    saveFoodLog() {
-      // Convert dates to strings for storage
-      const logToStore = this.foodLog.map(entry => ({
-        ...entry,
-        timestamp: entry.timestamp.toISOString()
-      }));
-      localStorage.setItem('foodLog', JSON.stringify(logToStore));
-    },
-    loadFoodLog() {
-      const stored = localStorage.getItem('foodLog');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        // Convert ISO strings back to Date objects
-        this.foodLog = parsed.map(entry => ({
-          ...entry,
-          timestamp: new Date(entry.timestamp)
-        }));
-        // Update nextId to avoid conflicts
-        if (this.foodLog.length > 0) {
-          this.nextId = Math.max(...this.foodLog.map(e => e.id)) + 1;
-        }
+
+    // Functions that load and upload meals
+    async loadRecentMeals() {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        console.error('No user found:', userError);
+        return;
       }
+
+      const user = userData.user;
+
+      const { data, error } = await supabase
+        .from('meals')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (error) {
+        console.error('Error loading meals:', error);
+        return;
+      }
+
+      this.foodLog = data.map(entry => ({
+        ...entry,
+        timestamp: new Date(entry.created_at)
+      }));
     }
   },
+
   mounted() {
-    this.loadFoodLog();
+    this.loadRecentMeals();
   }
 }
 </script>
+
 
 <style scoped>
 .food-tracker-container {
@@ -328,6 +386,39 @@ export default {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
   background: #2a2a2a;
 }
+
+.form-group select {
+  padding: 0.75rem;
+  border: 2px solid #3a3a3a;
+  background: #333;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  appearance: none; /* removes default arrow */
+  cursor: pointer;
+}
+
+/* Add a custom arrow */
+.form-group select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  background: #2a2a2a;
+}
+
+.form-group select option {
+  background: #2a2a2a;
+  color: #fff;
+}
+
 
 .submit-btn {
   padding: 0.75rem 1.5rem;
