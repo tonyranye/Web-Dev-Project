@@ -9,23 +9,23 @@
       No activities logged yet. Start by adding one!
     </div>
 
-    <div v-else class="log-list">
+        <div v-else class="log-list">
       <div
         v-for="activity in activities"
-        :key="activity.id"
+        :key="activity.activity_id"
         class="log-item"
       >
-        <div class="log-dot" :style="{ background: colorFor(activity.category) }"></div>
+        <div class="log-dot" :style="{ background: colorFor(activity.activity_type) }"></div>
         <div class="log-info">
           <div class="log-top">
-            <span class="log-name">{{ activity.name }}</span>
-            <span class="badge" :class="badgeClass(activity.category)">{{ activity.category }}</span>
+            <span class="log-name">{{ activity.name || activity.activity_type }}</span>
+            <span class="badge" :class="badgeClass(activity.activity_type)">{{ activity.activity_type }}</span>
           </div>
-          <span class="log-meta">{{ formatTime(activity.logged_at) }} · {{ activity.duration_minutes }} min</span>
+          <span class="log-meta">{{ formatTime(activity.created_at) }} · {{ activity.duration }} min</span>
         </div>
         <div class="log-right">
           <span v-if="activity.calories" class="log-kcal">{{ activity.calories }} kcal</span>
-          <button class="del-btn" :disabled="deleting === activity.id" @click="handleDelete(activity.id)">
+          <button class="del-btn" :disabled="deleting === activity.activity_id" @click="handleDelete(activity.activity_id)">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
             </svg>
