@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <div class="user-data">
     <img
@@ -24,7 +20,8 @@ import placeholder from "@/assets/placeholder_pfp_blue.avif";
 export default {
   data() {
     return {
-      profile: {}
+      profile: {},
+      placeholder,
     }
   },
 
