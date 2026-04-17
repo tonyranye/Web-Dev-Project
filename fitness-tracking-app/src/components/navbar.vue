@@ -1,6 +1,6 @@
 <template>
   <aside class="sidebar">
-    <div class="logo">🏋️‍♂️</div>
+    <div class="logo"><router-link to="/">🏋️‍♂️</router-link></div>
 
     <nav class="menu">
       <router-link class="menu-item" to="/">
