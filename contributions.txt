@@ -2,12 +2,14 @@ Matthew
 1. Designed navbar component
 2. Setup initial supabase SQL db (made the tables, and imported the API key, and the RLS policy)
 3. Create the profile information display UI
-4. Created the profile editing backend and frontend
+4. Created the profile pages editing backend, using components in the components/profile_page
 5. Created an express server for uploading profile pictures to supabase
 6. Bug fixing with query's to and from the database
 7. General bug fixing and integration work
 8. Designed the scripts in package.json to install both the app, and server and run them concurrently
 9. Added the supabase integration to the food tracking page
+10. Wrote README.md
+11. Recorded example video
 
 Tony
 1. Helped design navbar components
@@ -47,3 +49,8 @@ Syeda
 7. Built the ActivityLog component to display and delete today's activities.
 8. Implemented Supabase integration for the activities table (fetch by range, insert with user_id, delete).
 9. Added computed stats (today's totals, category breakdown, weekly data) driven reactively from Supabase data. 
+
+Owen
+1. Designed food tracking log system
+2. Designed food tracking statistics within the food tracker page
+3. Implemented a deletion system for users food tracking
