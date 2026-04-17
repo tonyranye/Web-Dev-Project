@@ -9,6 +9,15 @@ Matthew
 8. Designed the scripts in package.json to install both the app, and server and run them concurrently
 9. Added the supabase integration to the food tracking page
 
+Tony
+1. Helped design navbar components
+2. Setup Homepage Layout and info components
+3. Created Daily Tasks front and backend compoents
+4. Implemented Overview Card, linked to supabase
+5. Implemented Calorie Bar progress, linked to supabase
+6. Implemented QuickData componenets displaying user data
+7. generated smaple data for meals, tasks, and activities tables
+
 Isabella
 1. Created Graph Component for home page
 2. Created landing page with D3 and SVG components
