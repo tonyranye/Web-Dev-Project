@@ -128,7 +128,7 @@ Web-Dev-Project
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/fitness-tracking-app.git
+git clone https://github.com/tonyranye/Web-Dev-Project.git
 cd fitness-tracking-app
 ```
 
