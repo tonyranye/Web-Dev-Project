@@ -6,3 +6,7 @@ docs/.vitepress/dist
 
 # vitepress cache
 docs/.vitepress/cache
+
+fitness-tracking-app/server/
+.env
+env
